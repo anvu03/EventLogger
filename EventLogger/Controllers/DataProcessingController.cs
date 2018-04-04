@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using EventLogger.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Event = EventLogger.Models.Event;
+using EventType = EventLogger.Models.EventType;
 
 namespace EventLogger.Controllers
 {
@@ -37,6 +30,7 @@ namespace EventLogger.Controllers
 
                     return Ok(et);
                 }
+
                 foreach (var olEvent in olEvents)
                 {
                     var e = new Event()
@@ -75,6 +69,33 @@ namespace EventLogger.Controllers
             }
 
             return Ok(olEventTypes.Count());
+        }
+
+        [Route("InsertEvents")]
+        [HttpGet]
+        public IHttpActionResult InsertEvents()
+        {
+            var olEvents = OneLogin.Client.GetEvents();
+            var apps = new Dictionary<int, EventLogger.Models.App>();
+            // update event types if there's a new one
+            foreach (var olEvent in olEvents)
+            {
+                var appId = olEvent["app_id"].ToObject(typeof(int?));
+                var appName = (string) olEvent["app_name"];
+
+                if (appId != null && apps.ContainsKey((int) appId))
+                {
+                    apps.Add((int) appId, new EventLogger.Models.App()
+                    {
+                        Name = appName,
+                        OL_Id = (int) appId,
+                    });
+                }
+
+                return Ok(apps.Count);
+            }
+
+            return Ok("not null");
         }
     }
 }

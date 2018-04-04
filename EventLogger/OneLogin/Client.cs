@@ -93,6 +93,5 @@ namespace EventLogger.OneLogin
 
     public struct App
     {
-
     }
 }
