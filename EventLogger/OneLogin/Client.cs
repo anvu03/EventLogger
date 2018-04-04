@@ -50,9 +50,17 @@ namespace EventLogger.OneLogin
             return accessToken;
         }
 
-        public JObject GetEventTypes()
+        public static JToken GetEventTypes()
         {
-            return null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://api.us.onelogin.com");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAccessToken());
+                HttpResponseMessage repsonse = client.GetAsync("/api/1/events/types").Result;
+                string result = repsonse.Content.ReadAsStringAsync().Result;
+
+                return JObject.Parse(result)["data"];
+            }
         }
 
 
