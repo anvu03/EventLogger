@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLogger", "EventLogger\EventLogger.csproj", "{320B0297-813D-4DD6-ABF4-77814D1AB089}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLogger", "EventLogger\EventLogger.csproj", "{DF0400CE-1C1C-4D40-8FAE-08DFB5275342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{320B0297-813D-4DD6-ABF4-77814D1AB089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{320B0297-813D-4DD6-ABF4-77814D1AB089}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{320B0297-813D-4DD6-ABF4-77814D1AB089}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{320B0297-813D-4DD6-ABF4-77814D1AB089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF0400CE-1C1C-4D40-8FAE-08DFB5275342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF0400CE-1C1C-4D40-8FAE-08DFB5275342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF0400CE-1C1C-4D40-8FAE-08DFB5275342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF0400CE-1C1C-4D40-8FAE-08DFB5275342}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1ECFD966-4496-4FB2-A3E1-838925D42185}
+		SolutionGuid = {D05F185B-9CDF-48A5-9364-7B3A6F235D2A}
 	EndGlobalSection
 EndGlobal

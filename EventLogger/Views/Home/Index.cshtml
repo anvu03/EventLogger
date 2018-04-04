@@ -1,26 +1,67 @@
-﻿<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <button class="btn btn-sm btn-outline-secondary">Share</button>
-            <button class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-        </button>
-    </div>
-</div>
-
-
-<div class="row">
+﻿<div class="row">
     <div class="col">
         <h5>Login Count Per App</h5>
-        <div id="content"></div>
-        <script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>App</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+            </tbody>
+        </table>
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col"></div>
 
-    </div>
-    <div class="col">
-        <h5></h5>
-    </div>
 </div>
+
+<script>
+    $content = $("#content");
+
+
+    function renderRows(data) {
+        var rows;
+
+        data.forEach(function(item) {
+            rows += `
+<tr>
+    <td>${item}</td>
+    <td></td>
+</tr>
+`;
+        });
+
+        return rows;
+    }
+
+    function renderPagination() {
+        var pagination;
+        return pagination;
+    }
+
+    $content.append(renderRows([1, 2, 3]));
+
+
+</script>
