@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Http;
 using EventLogger.Models;
 using Event = EventLogger.Models.Event;
@@ -24,7 +25,6 @@ namespace EventLogger.Controllers
                 {
                     var et = new EventType()
                     {
-                        OL_Id = (int) olEventType["id"],
                         Name = (string) olEventType["name"]
                     };
 
@@ -36,7 +36,6 @@ namespace EventLogger.Controllers
                     var e = new Event()
                     {
                         CreatedAt = Convert.ToDateTime(olEvent["created_at"]),
-                        OL_Id = (int) olEvent["id"]
                     };
 
                     return Ok(e);
@@ -52,50 +51,94 @@ namespace EventLogger.Controllers
         {
             var olEventTypes = OneLogin.Client.GetEventTypes();
             var eventTypes = new List<EventType>();
-
-            foreach (var olEventType in olEventTypes)
-            {
-                eventTypes.Add(new EventType
-                {
-                    OL_Id = (int) olEventType["id"],
-                    Name = (string) olEventType["name"]
-                });
-            }
-
             using (var context = new EventLoggerDataContext())
             {
-                context.EventTypes.InsertAllOnSubmit(eventTypes);
-                context.SubmitChanges();
+                foreach (var olEventType in olEventTypes)
+                {
+                    var eventType = new EventType
+                    {
+                        Id = (int) olEventType["id"],
+                        Name = (string) olEventType["name"]
+                    };
+                    eventTypes.Add(eventType);
+
+
+                    try
+                    {
+                        context.EventTypes.InsertOnSubmit(eventType);
+                        context.SubmitChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        return Ok(olEventType);
+                    }
+                }
             }
 
-            return Ok(olEventTypes.Count());
+
+            return Ok();
         }
 
         [Route("InsertEvents")]
         [HttpGet]
         public IHttpActionResult InsertEvents()
         {
+            var context = new EventLoggerDataContext();
             var olEvents = OneLogin.Client.GetEvents();
-            var apps = new Dictionary<int, EventLogger.Models.App>();
+            var events = new List<Event>();
             // update event types if there's a new one
+
             foreach (var olEvent in olEvents)
             {
                 var appId = olEvent["app_id"].ToObject(typeof(int?));
                 var appName = (string) olEvent["app_name"];
 
-                if (appId != null && apps.ContainsKey((int) appId))
+                // if there's an app
+                if (appId != null)
                 {
-                    apps.Add((int) appId, new EventLogger.Models.App()
+                    // check with database
+                    if (context.Apps.FirstOrDefault(app => app.Id == (int) appId) == null)
                     {
-                        Name = appName,
-                        OL_Id = (int) appId,
-                    });
+                        // create new app object
+                        var newApp = new App()
+                        {
+                            Id = (int) appId,
+                            Name = appName
+                        };
+                        // insert into context
+                        context.Apps.InsertOnSubmit(newApp);
+                        // save changes to database
+                        context.SubmitChanges();
+                    }
                 }
 
-                return Ok(apps.Count);
+                var newEvent = new Event()
+                {
+                    Id = (int) olEvent["id"],
+                    App_Id = (int?) olEvent["app_id"],
+                    EventType_Id = (int) olEvent["event_type_id"],
+                    CreatedAt = Convert.ToDateTime(olEvent["created_at"])
+                };
+
+                try
+                {
+                    context.Events.InsertOnSubmit(newEvent);
+                    context.SubmitChanges();
+                    events.Add(newEvent);
+                }
+                catch (Exception e)
+                {
+                }
             }
 
-            return Ok("not null");
+            // compare with database
+
+            // if different then insert new app
+
+            // insert events
+
+            context.Dispose();
+            return Ok(events.Count);
         }
     }
 }

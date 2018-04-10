@@ -117,8 +117,6 @@ namespace EventLogger.Models
 		
 		private string _Name;
 		
-		private int _OL_Id;
-		
 		private EntitySet<Event> _Events;
 		
 		private EntitySet<Event_Aggregate> _Event_Aggregates;
@@ -131,8 +129,6 @@ namespace EventLogger.Models
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnOL_IdChanging(int value);
-    partial void OnOL_IdChanged();
     #endregion
 		
 		public App()
@@ -142,7 +138,7 @@ namespace EventLogger.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int Id
 		{
 			get
@@ -178,26 +174,6 @@ namespace EventLogger.Models
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OL_Id", DbType="Int NOT NULL")]
-		public int OL_Id
-		{
-			get
-			{
-				return this._OL_Id;
-			}
-			set
-			{
-				if ((this._OL_Id != value))
-				{
-					this.OnOL_IdChanging(value);
-					this.SendPropertyChanging();
-					this._OL_Id = value;
-					this.SendPropertyChanged("OL_Id");
-					this.OnOL_IdChanged();
 				}
 			}
 		}
@@ -283,8 +259,6 @@ namespace EventLogger.Models
 		
 		private string _Name;
 		
-		private int _OL_Id;
-		
 		private EntitySet<Event> _Events;
 		
 		private EntitySet<Event_Aggregate> _Event_Aggregates;
@@ -297,8 +271,6 @@ namespace EventLogger.Models
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnOL_IdChanging(int value);
-    partial void OnOL_IdChanged();
     #endregion
 		
 		public EventType()
@@ -308,7 +280,7 @@ namespace EventLogger.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int Id
 		{
 			get
@@ -344,26 +316,6 @@ namespace EventLogger.Models
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OL_Id", DbType="Int NOT NULL")]
-		public int OL_Id
-		{
-			get
-			{
-				return this._OL_Id;
-			}
-			set
-			{
-				if ((this._OL_Id != value))
-				{
-					this.OnOL_IdChanging(value);
-					this.SendPropertyChanging();
-					this._OL_Id = value;
-					this.SendPropertyChanged("OL_Id");
-					this.OnOL_IdChanged();
 				}
 			}
 		}
@@ -451,9 +403,7 @@ namespace EventLogger.Models
 		
 		private int _EventType_Id;
 		
-		private int _App_Id;
-		
-		private int _OL_Id;
+		private System.Nullable<int> _App_Id;
 		
 		private EntityRef<App> _App;
 		
@@ -469,10 +419,8 @@ namespace EventLogger.Models
     partial void OnCreatedAtChanged();
     partial void OnEventType_IdChanging(int value);
     partial void OnEventType_IdChanged();
-    partial void OnApp_IdChanging(int value);
+    partial void OnApp_IdChanging(System.Nullable<int> value);
     partial void OnApp_IdChanged();
-    partial void OnOL_IdChanging(int value);
-    partial void OnOL_IdChanged();
     #endregion
 		
 		public Event()
@@ -482,7 +430,7 @@ namespace EventLogger.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int Id
 		{
 			get
@@ -546,8 +494,8 @@ namespace EventLogger.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int NOT NULL")]
-		public int App_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
+		public System.Nullable<int> App_Id
 		{
 			get
 			{
@@ -566,26 +514,6 @@ namespace EventLogger.Models
 					this._App_Id = value;
 					this.SendPropertyChanged("App_Id");
 					this.OnApp_IdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OL_Id", DbType="Int NOT NULL")]
-		public int OL_Id
-		{
-			get
-			{
-				return this._OL_Id;
-			}
-			set
-			{
-				if ((this._OL_Id != value))
-				{
-					this.OnOL_IdChanging(value);
-					this.SendPropertyChanging();
-					this._OL_Id = value;
-					this.SendPropertyChanged("OL_Id");
-					this.OnOL_IdChanged();
 				}
 			}
 		}
@@ -617,7 +545,7 @@ namespace EventLogger.Models
 					}
 					else
 					{
-						this._App_Id = default(int);
+						this._App_Id = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("App");
 				}
@@ -689,7 +617,7 @@ namespace EventLogger.Models
 		
 		private int _EventType_Id;
 		
-		private int _App_Id;
+		private System.Nullable<int> _App_Id;
 		
 		private int _Count;
 		
@@ -707,7 +635,7 @@ namespace EventLogger.Models
     partial void OnIdChanged();
     partial void OnEventType_IdChanging(int value);
     partial void OnEventType_IdChanged();
-    partial void OnApp_IdChanging(int value);
+    partial void OnApp_IdChanging(System.Nullable<int> value);
     partial void OnApp_IdChanged();
     partial void OnCountChanging(int value);
     partial void OnCountChanged();
@@ -766,8 +694,8 @@ namespace EventLogger.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int NOT NULL")]
-		public int App_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
+		public System.Nullable<int> App_Id
 		{
 			get
 			{
@@ -857,7 +785,7 @@ namespace EventLogger.Models
 					}
 					else
 					{
-						this._App_Id = default(int);
+						this._App_Id = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("App");
 				}

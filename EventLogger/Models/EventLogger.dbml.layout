@@ -2,56 +2,56 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="EventLogger">
   <DataContextMoniker Name="/EventLoggerDataContext" />
   <nestedChildShapes>
-    <classShape Id="e106dd87-a32e-4d88-934c-00101abb2b85" absoluteBounds="0.75, 4, 2, 1.3862939453125005">
+    <classShape Id="fc449a81-5584-4e1b-992f-a45d2a081139" absoluteBounds="0.75, 4, 2, 1.1939925130208335">
       <DataClassMoniker Name="/EventLoggerDataContext/App" />
       <nestedChildShapes>
-        <elementListCompartment Id="d55d9f69-46e1-4595-abb2-e82e8564b1f7" absoluteBounds="0.765, 4.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="08812ae4-6607-4461-b086-9055d9c301af" absoluteBounds="0.765, 4.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="5bb7575d-4b4b-4a74-b6d6-4a5fe0a7bdad" absoluteBounds="0.75, 1.75, 2, 1.3862939453125">
+    <classShape Id="85dc8dd5-2f8a-41ef-9c1e-81e1a10327c8" absoluteBounds="0.75, 1.625, 2, 1.1939925130208333">
       <DataClassMoniker Name="/EventLoggerDataContext/EventType" />
       <nestedChildShapes>
-        <elementListCompartment Id="db87da54-b7e6-43da-8a5a-99a2bee7292b" absoluteBounds="0.765, 2.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="9cab6d3c-f178-44a3-89aa-c891d86e018a" absoluteBounds="0.765, 2.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="6274b8bd-cb9a-432b-8074-2989fe898495" absoluteBounds="3.5, 3.75, 2, 1.7708968098958327">
+    <classShape Id="0b4a15e9-9769-440c-b540-e5e42dd11a8e" absoluteBounds="3.5, 3.875, 2, 1.5785953776041666">
       <DataClassMoniker Name="/EventLoggerDataContext/Event" />
       <nestedChildShapes>
-        <elementListCompartment Id="25dc8ccf-28a9-4320-8fff-87b01a28af30" absoluteBounds="3.515, 4.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="31b1649d-2067-4c2b-83fc-2f262e5590d1" absoluteBounds="3.515, 4.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="75381516-d09a-4d08-b702-ee6d0d9c3d7a" absoluteBounds="3.5, 0.75, 2, 1.7708968098958331">
+    <classShape Id="85559ba8-f2e6-423b-810a-d2a5f00ca669" absoluteBounds="3.5, 0.75, 2, 1.7708968098958331">
       <DataClassMoniker Name="/EventLoggerDataContext/Event_Aggregate" />
       <nestedChildShapes>
-        <elementListCompartment Id="a308cc09-8dc1-452c-8057-2d7a4d97e746" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="02faa4aa-d47a-48a6-84d0-39b01a35a330" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 4.69314697265625); (3.5 : 4.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 4.59699625651042); (3.04166666666667 : 4.59699625651042 : JumpStart); (3.20833333333333 : 4.59699625651042 : JumpEnd); (3.5 : 4.59699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/App/App_Event" />
       <nodes>
-        <classShapeMoniker Id="e106dd87-a32e-4d88-934c-00101abb2b85" />
-        <classShapeMoniker Id="6274b8bd-cb9a-432b-8074-2989fe898495" />
+        <classShapeMoniker Id="fc449a81-5584-4e1b-992f-a45d2a081139" />
+        <classShapeMoniker Id="0b4a15e9-9769-440c-b540-e5e42dd11a8e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 3.1362939453125); (3.125 : 3.5112939453125); (3.125 : 3.375); (3.5 : 3.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.75 : 2.81899251302083); (3.125 : 3.19399251302083); (3.125 : 5.05654781705729); (3.5 : 5.05654781705729)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/EventType/EventType_Event" />
       <nodes>
-        <classShapeMoniker Id="5bb7575d-4b4b-4a74-b6d6-4a5fe0a7bdad" />
-        <classShapeMoniker Id="6274b8bd-cb9a-432b-8074-2989fe898495" />
+        <classShapeMoniker Id="85dc8dd5-2f8a-41ef-9c1e-81e1a10327c8" />
+        <classShapeMoniker Id="0b4a15e9-9769-440c-b540-e5e42dd11a8e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 4.0618490375601); (3.3125 : 3.4993490375601); (3.3125 : 1.63544840494792); (3.5 : 1.63544840494792)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 4.03214495227364); (3.06607443490112 : 3.71607051737252 : JumpStart); (3.18392556509888 : 3.59821938717476 : JumpEnd); (3.28125 : 3.50089495227364); (3.28125 : 1.63544840494792); (3.5 : 1.63544840494792)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/App/App_Event_Aggregate" />
       <nodes>
-        <classShapeMoniker Id="e106dd87-a32e-4d88-934c-00101abb2b85" />
-        <classShapeMoniker Id="75381516-d09a-4d08-b702-ee6d0d9c3d7a" />
+        <classShapeMoniker Id="fc449a81-5584-4e1b-992f-a45d2a081139" />
+        <classShapeMoniker Id="85559ba8-f2e6-423b-810a-d2a5f00ca669" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 2.13544840494792); (3.22916666666667 : 2.13544840494792 : JumpStart); (3.39583333333333 : 2.13544840494792 : JumpEnd); (3.5 : 2.13544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 2.14067260742187); (3.19791666666667 : 2.14067260742187 : JumpStart); (3.36458333333333 : 2.14067260742187 : JumpEnd); (3.5 : 2.14067260742187)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/EventType/EventType_Event_Aggregate" />
       <nodes>
-        <classShapeMoniker Id="5bb7575d-4b4b-4a74-b6d6-4a5fe0a7bdad" />
-        <classShapeMoniker Id="75381516-d09a-4d08-b702-ee6d0d9c3d7a" />
+        <classShapeMoniker Id="85dc8dd5-2f8a-41ef-9c1e-81e1a10327c8" />
+        <classShapeMoniker Id="85559ba8-f2e6-423b-810a-d2a5f00ca669" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>
