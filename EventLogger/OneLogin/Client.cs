@@ -64,14 +64,21 @@ namespace EventLogger.OneLogin
         }
 
 
-
-        public static JToken GetEvents()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="since"></param>
+        /// <param name="until"></param>
+        /// <returns></returns>
+        public static JToken GetEvents(string since = "", string until = "")
         {
+            Convert.ToDateTime(since);
+            Convert.ToDateTime(until);
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://api.us.onelogin.com");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAccessToken());
-                HttpResponseMessage repsonse = client.GetAsync("/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since=&until=&user_id=").Result;
+                HttpResponseMessage repsonse = client.GetAsync($"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={since}&until={until}&user_id=").Result;
                 string result = repsonse.Content.ReadAsStringAsync().Result;
 
                 return JObject.Parse(result)["data"];

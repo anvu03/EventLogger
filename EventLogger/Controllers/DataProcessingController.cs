@@ -79,12 +79,21 @@ namespace EventLogger.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method will be called by the scheduled windows service at 0:01 - 3:00
+        /// It will retrieve all events created from 0:00 - 23:59:59 of yesterday
+        /// </summary>
+        /// <returns></returns>
         [Route("InsertEvents")]
         [HttpGet]
         public IHttpActionResult InsertEvents()
         {
             var context = new EventLoggerDataContext();
-            var olEvents = OneLogin.Client.GetEvents();
+
+            // update event types 
+
+            var olEvents = OneLogin.Client.GetEvents(since: DateTime.Today.ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"),
+                until: (DateTime.Today.Add(new TimeSpan(23, 59, 59))).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"));
             var events = new List<Event>();
             // update event types if there's a new one
 
@@ -93,12 +102,13 @@ namespace EventLogger.Controllers
                 var appId = olEvent["app_id"].ToObject(typeof(int?));
                 var appName = (string) olEvent["app_name"];
 
-                // if there's an app
-                if (appId != null)
+                // insert a new app into database if there's one 
+                if (appId != null) // if the event references to an app
                 {
-                    // check with database
+                    // does the database already have this app? 
                     if (context.Apps.FirstOrDefault(app => app.Id == (int) appId) == null)
                     {
+                        // if so, insert this new app into the database
                         // create new app object
                         var newApp = new App()
                         {
