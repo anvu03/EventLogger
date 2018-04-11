@@ -92,10 +92,37 @@ namespace EventLogger.Controllers
 
             // update event types 
 
-            var olEvents = OneLogin.Client.GetEvents(since: DateTime.Today.ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"),
-                until: (DateTime.Today.Add(new TimeSpan(23, 59, 59))).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"));
+            var eventTypes = OneLogin.Client.GetEventTypes();
+
+            foreach (var eventType in eventTypes)
+            {
+                if (context.EventTypes.FirstOrDefault(e => e.Id == (int) eventType["id"]) == null)
+                {
+                    try
+                    {
+                        context.EventTypes.InsertOnSubmit(new EventType()
+                        {
+                            Id = (int) eventType["id"],
+                            Name = (string) eventType["name"],
+                        });
+                        context.SubmitChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        return Ok(eventType);
+                    }
+                }
+            }
+
+
+//            var olEvents = OneLogin.Client.GetEvents(since: DateTime.Today,
+//                until: DateTime.Today.Add(new TimeSpan(23, 59, 59)));
+
+            var olEvents = OneLogin.Client.GetEvents();
+
             var events = new List<Event>();
             // update event types if there's a new one
+
 
             foreach (var olEvent in olEvents)
             {

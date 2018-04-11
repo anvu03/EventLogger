@@ -23,7 +23,7 @@ namespace EventLogger.OneLogin
             const string oauthUri = "https://api.us.onelogin.com/auth/oauth2/token";
             const string payload = "{\n\"grant_type\":\"client_credentials\"\n}";
             byte[] dataBytes = Encoding.UTF8.GetBytes(payload);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(BaseUri + "/auth/oauth2/token");
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(BaseUri + "/auth/oauth2/token");
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             request.ContentLength = dataBytes.Length;
             request.ContentType = "application/json";
@@ -37,7 +37,7 @@ namespace EventLogger.OneLogin
 
             string postResponse;
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
             using (Stream stream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -45,7 +45,7 @@ namespace EventLogger.OneLogin
             }
 
             JObject oauthResponse = JObject.Parse(postResponse);
-            string accessToken = (string)oauthResponse["data"][0]["access_token"];
+            string accessToken = (string) oauthResponse["data"][0]["access_token"];
 
             return accessToken;
         }
@@ -70,15 +70,22 @@ namespace EventLogger.OneLogin
         /// <param name="since"></param>
         /// <param name="until"></param>
         /// <returns></returns>
-        public static JToken GetEvents(string since = "", string until = "")
+        public static JToken GetEvents(DateTime? since = null, DateTime? until = null)
         {
-            Convert.ToDateTime(since);
-            Convert.ToDateTime(until);
+            string str_since = "";
+            string str_until = "";
+            if (since != null)
+                str_since = ((DateTime) since).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
+            if (until != null)
+                str_until = ((DateTime) until).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://api.us.onelogin.com");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAccessToken());
-                HttpResponseMessage repsonse = client.GetAsync($"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={since}&until={until}&user_id=").Result;
+                HttpResponseMessage repsonse = client
+                    .GetAsync(
+                        $"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={str_since}&until={str_until}&user_id=")
+                    .Result;
                 string result = repsonse.Content.ReadAsStringAsync().Result;
 
                 return JObject.Parse(result)["data"];
@@ -88,14 +95,13 @@ namespace EventLogger.OneLogin
 
     public struct EventType
     {
-        public int Id{ get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
     }
 
     public struct Event
     {
-        
     }
 
     public struct App
