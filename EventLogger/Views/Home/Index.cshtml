@@ -137,6 +137,7 @@
         return pagination;
     }
 
+    // get logins event 
     $.ajax({
         url: "/api/weasel/logins",
         method: "get"
@@ -144,6 +145,7 @@
         $content.append(renderRows(data));
     });
 
+    // get failed logins 
     $.ajax({
         url: "/api/weasel/failed_logins",
         method: "get"
@@ -151,6 +153,7 @@
         $("#failed-login-tbody").append(renderRows(data));
     });
 
+    // get password changes
     $.ajax({
         url: "/api/weasel/password_changes",
         method: "get"
