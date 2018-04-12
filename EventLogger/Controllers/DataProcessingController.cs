@@ -151,6 +151,7 @@ namespace EventLogger.Controllers
             // aggregate
 
             var result = (from e in context.Events
+//                where e.CreatedAt > new DateTime() && e.CreatedAt < new DateTime()
                 group e by new {e.EventType_Id, e.App_Id}
                 into g
                 select new
@@ -159,6 +160,34 @@ namespace EventLogger.Controllers
                     g.Key.App_Id,
                     count = g.Count()
                 }).ToList();
+
+
+            // insert aggregate into database
+            // TODO prevent inserting twice
+            foreach (var r in result)
+            {
+                var instance = context.Event_Aggregates.FirstOrDefault(
+                    eg => (eg.App_Id == r.App_Id || (eg.App_Id == null && r.App_Id == null)) &&
+                          eg.EventType_Id == r.EventType_Id);
+                if (instance == null)
+                {
+                    context.Event_Aggregates.InsertOnSubmit(new Event_Aggregate()
+                    {
+                        Date = DateTime.Today,
+                        App_Id = r.App_Id,
+                        EventType_Id = r.EventType_Id,
+                        Count = r.count
+                    });
+                    context.SubmitChanges();
+                }
+                else
+                {
+                    // update count
+                    instance.Count = r.count;
+                    context.SubmitChanges();
+                }
+            }
+
 
             context.Dispose();
             return Json(result);
