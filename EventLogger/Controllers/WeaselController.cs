@@ -28,12 +28,30 @@ namespace EventLogger.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public IHttpActionResult GetAllEvents()
+        [Route("logins")]
+        public IHttpActionResult GetLogins()
+        {
+            return Json((from eg in _context.Event_Aggregates
+                where eg.App_Id != null && eg.EventType_Id == 8
+                select new {app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count}).ToList());
+        }
+
+        [HttpGet]
+        [Route("failed_logins")]
+        public IHttpActionResult GetFailedLogins()
+        {
+            return Json((from eg in _context.Event_Aggregates
+                where eg.App_Id != null && eg.EventType_Id == 9
+                select new { app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count }).ToList());
+        }
+
+        [HttpGet]
+        [Route("password_changes")]
+        public IHttpActionResult GetPasswordChanges()
         {
             return Json((from eg in _context.Event_Aggregates
                 where eg.App_Id != null
-                select new {app_name = eg.App.Name, event_type = eg.EventType.Name}).ToList());
+                select new { app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count }).ToList());
         }
     }
 }
