@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace EventLogger.Controllers
 {
-    [RoutePrefix("api/events")]
+    [RoutePrefix("api/weasel")]
     public class EventController : ApiController
     {
         private readonly EventLoggerDataContext _context;
@@ -29,12 +29,11 @@ namespace EventLogger.Controllers
 
         [HttpGet]
         [Route("")]
-        public JsonResult<List<object>> GetAllEvents()
+        public IHttpActionResult GetAllEvents()
         {
-            var result = new List<object>();
-            var events = this._context.Events.ToList();
-            events.ForEach(e => result.Add(new {id = e.Id, event_type = e.EventType.Name}));
-            return Json(result);
+            return Json((from eg in _context.Event_Aggregates
+                where eg.App_Id != null
+                select new {app_name = eg.App.Name, event_type = eg.EventType.Name}).ToList());
         }
     }
 }
