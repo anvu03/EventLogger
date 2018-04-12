@@ -50,7 +50,7 @@ namespace EventLogger.Controllers
         public IHttpActionResult GetPasswordChanges()
         {
             return Json((from eg in _context.Event_Aggregates
-                where eg.App_Id != null
+                where eg.App_Id != null && eg.EventType_Id == 11 // password change = 11
                 select new { app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count }).ToList());
         }
     }

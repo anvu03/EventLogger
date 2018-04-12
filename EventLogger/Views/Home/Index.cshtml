@@ -8,8 +8,7 @@
                 <th>Count</th>
             </tr>
             </thead>
-            <tbody id="content">
-            </tbody>
+            <tbody id="content"></tbody>
         </table>
         <div>
             <nav aria-label="Page navigation example">
@@ -33,7 +32,78 @@
             </nav>
         </div>
     </div>
-    <div class="col"></div>
+
+
+    @*    failed login*@
+    <div class="col">
+        <h5>Failed Login</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>App</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody id="failed-login-tbody"></tbody>
+        </table>
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    @*password change*@
+    <div class="col">
+        <h5>Password Change</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>App</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody id="password-change-tbody"></tbody>
+        </table>
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 
 </div>
 
@@ -43,12 +113,18 @@
 
     function renderRows(data) {
         var rows;
-
+        /**
+{
+    app_name: "Admin Manager Evaluation By Adjuster",
+    event_type: "USER_LOGGED_INTO_APP",
+    count: 1
+}
+         */
         data.forEach(function(item) {
             rows += `
 <tr>
-    <td>${item}</td>
-    <td></td>
+    <td>${item.app_name}</td>
+    <td>${item.count}</td>
 </tr>
 `;
         });
@@ -61,7 +137,26 @@
         return pagination;
     }
 
-    $content.append(renderRows([1, 2, 3]));
+    $.ajax({
+        url: "/api/weasel/logins",
+        method: "get"
+    }).done(function(data) {
+        $content.append(renderRows(data));
+    });
+
+    $.ajax({
+        url: "/api/weasel/failed_logins",
+        method: "get"
+    }).done(function(data) {
+        $("#failed-login-tbody").append(renderRows(data));
+    });
+
+    $.ajax({
+        url: "/api/weasel/password_changes",
+        method: "get"
+    }).done(function(data) {
+        $("#password-change-tbody").append(renderRows(data));
+    });
 
 
 </script>
