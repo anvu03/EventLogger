@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using EventLogger.Models;
+using Newtonsoft.Json;
 
 namespace EventLogger.Controllers
 {
@@ -25,10 +27,14 @@ namespace EventLogger.Controllers
             base.Dispose(disposing);
         }
 
-        public IHttpActionResult GetAllEvents()
+        [HttpGet]
+        [Route("")]
+        public JsonResult<List<object>> GetAllEvents()
         {
+            var result = new List<object>();
             var events = this._context.Events.ToList();
-            return Ok(events);
+            events.ForEach(e => result.Add(new {id = e.Id, event_type = e.EventType.Name}));
+            return Json(result);
         }
     }
 }
