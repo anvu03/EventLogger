@@ -18,6 +18,15 @@ namespace EventLogger.OneLogin
 
         private const string BaseUri = "https://api.us.onelogin.com";
 
+        private string AfterCursor = "";
+
+        private string AccessToken = "";
+
+        public Client()
+        {
+            AccessToken = GetAccessToken();
+        }
+
         private static string GetAccessToken()
         {
             const string oauthUri = "https://api.us.onelogin.com/auth/oauth2/token";
@@ -50,7 +59,7 @@ namespace EventLogger.OneLogin
             return accessToken;
         }
 
-        public static JToken GetEventTypes()
+        public JToken GetEventTypes()
         {
             using (var client = new HttpClient())
             {
@@ -70,41 +79,28 @@ namespace EventLogger.OneLogin
         /// <param name="since"></param>
         /// <param name="until"></param>
         /// <returns></returns>
-        public static JToken GetEvents(DateTime? since = null, DateTime? until = null)
+        public JToken GetEvents(DateTime? since = null, DateTime? until = null, bool next = false)
         {
-            string str_since = "";
-            string str_until = "";
+            string strSince = "";
+            string strUntil = "";
             if (since != null)
-                str_since = ((DateTime) since).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
+                strSince = ((DateTime) since).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
             if (until != null)
-                str_until = ((DateTime) until).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
+                strUntil = ((DateTime) until).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://api.us.onelogin.com");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAccessToken());
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
                 HttpResponseMessage repsonse = client
                     .GetAsync(
-                        $"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={str_since}&until={str_until}&user_id=")
+                        $"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={strSince}&until={strUntil}&user_id=&after_cursor={(next ? AfterCursor : "")}")
                     .Result;
                 string result = repsonse.Content.ReadAsStringAsync().Result;
+                JObject json = JObject.Parse(result);
+                AfterCursor = (string) json["pagination"]["after_cursor"];
 
-                return JObject.Parse(result)["data"];
+                return json["data"];
             }
         }
-    }
-
-    public struct EventType
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public string Name { get; set; }
-    }
-
-    public struct Event
-    {
-    }
-
-    public struct App
-    {
     }
 }
