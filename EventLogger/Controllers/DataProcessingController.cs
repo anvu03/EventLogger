@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Http;
-using System.Web.Mvc.Html;
 using EventLogger.Models;
-using Microsoft.Ajax.Utilities;
 using Event = EventLogger.Models.Event;
 using EventType = EventLogger.Models.EventType;
 
@@ -67,19 +64,14 @@ namespace EventLogger.Controllers
 
             foreach (var eventType in eventTypes)
                 if (context.EventTypes.FirstOrDefault(e => e.Id == (int) eventType["id"]) == null)
-                    try
+                {
+                    context.EventTypes.InsertOnSubmit(new EventType()
                     {
-                        context.EventTypes.InsertOnSubmit(new EventType()
-                        {
-                            Id = (int) eventType["id"],
-                            Name = (string) eventType["name"],
-                        });
-                        context.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        return Ok(eventType);
-                    }
+                        Id = (int)eventType["id"],
+                        Name = (string)eventType["name"],
+                    });
+                    context.SubmitChanges();
+                }
 
             // list of events to report 
             var reportableEventTypes = context.EventTypes.Where(e => e.Reportable).ToList();
@@ -144,13 +136,6 @@ namespace EventLogger.Controllers
                             context.Events.InsertOnSubmit(newEvent);
                             context.SubmitChanges();
                             events.Add(newEvent);
-                        }
-
-                        try
-                        {
-                        }
-                        catch (Exception e)
-                        {
                         }
                     }
 
