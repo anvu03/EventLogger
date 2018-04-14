@@ -18,8 +18,6 @@ namespace EventLogger.OneLogin
 
         private const string BaseUri = "https://api.us.onelogin.com";
 
-        private string AfterCursor = "";
-
         private string AccessToken = "";
 
         public Client()
@@ -79,7 +77,7 @@ namespace EventLogger.OneLogin
         /// <param name="since"></param>
         /// <param name="until"></param>
         /// <returns></returns>
-        public JToken GetEvents(DateTime? since = null, DateTime? until = null, bool next = false)
+        public JToken GetEvents(DateTime? since = null, DateTime? until = null, int? eventTypeId = null, string afterCursor = "")
         {
             string strSince = "";
             string strUntil = "";
@@ -93,12 +91,10 @@ namespace EventLogger.OneLogin
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
                 HttpResponseMessage repsonse = client
                     .GetAsync(
-                        $"/api/1/events?event_type_id=&client_id=&directory_id=&created_at=&id=&resolution=&since={strSince}&until={strUntil}&user_id=&after_cursor={(next ? AfterCursor : "")}")
+                        $"/api/1/events?event_type_id={(eventTypeId == null ? "" : eventTypeId.ToString())}&client_id=&directory_id=&created_at=&id=&resolution=&since={strSince}&until={strUntil}&user_id=&after_cursor={afterCursor}")
                     .Result;
                 string result = repsonse.Content.ReadAsStringAsync().Result;
                 JObject json = JObject.Parse(result);
-                AfterCursor = (string) json["pagination"]["after_cursor"];
-
                 return json["data"];
             }
         }

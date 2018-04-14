@@ -259,6 +259,8 @@ namespace EventLogger.Models
 		
 		private string _Name;
 		
+		private bool _Reportable;
+		
 		private EntitySet<Event> _Events;
 		
 		private EntitySet<Event_Aggregate> _Event_Aggregates;
@@ -271,6 +273,8 @@ namespace EventLogger.Models
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
+    partial void OnReportableChanging(bool value);
+    partial void OnReportableChanged();
     #endregion
 		
 		public EventType()
@@ -316,6 +320,26 @@ namespace EventLogger.Models
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Reportable", DbType="Bit NOT NULL")]
+		public bool Reportable
+		{
+			get
+			{
+				return this._Reportable;
+			}
+			set
+			{
+				if ((this._Reportable != value))
+				{
+					this.OnReportableChanging(value);
+					this.SendPropertyChanging();
+					this._Reportable = value;
+					this.SendPropertyChanged("Reportable");
+					this.OnReportableChanged();
 				}
 			}
 		}

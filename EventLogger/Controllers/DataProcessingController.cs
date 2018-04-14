@@ -57,96 +57,99 @@ namespace EventLogger.Controllers
         [HttpGet]
         public IHttpActionResult InsertEvents()
         {
+            var context = new EventLoggerDataContext();
             var oneLoginClient = new OneLogin.Client();
 
-            var context = new EventLoggerDataContext();
+            // update event types 
 
-//            // update event types 
-//
-//            var eventTypes = oneLoginClient.GetEventTypes();
-//
-//            foreach (var eventType in eventTypes)
-//            {
-//                if (context.EventTypes.FirstOrDefault(e => e.Id == (int) eventType["id"]) == null)
-//                {
-//                    try
-//                    {
-//                        context.EventTypes.InsertOnSubmit(new EventType()
-//                        {
-//                            Id = (int) eventType["id"],
-//                            Name = (string) eventType["name"],
-//                        });
-//                        context.SubmitChanges();
-//                    }
-//                    catch (Exception e)
-//                    {
-//                        return Ok(eventType);
-//                    }
-//                }
-//            }
-//
-//
-////            var olEvents = OneLogin.Client.GetEvents(since: DateTime.Today,
-////                until: DateTime.Today.Add(new TimeSpan(23, 59, 59)));
-//
-//
-//            var events = new List<Event>();
-//            // update event types if there's a new one
-//
-//            while (true)
-//            {
-////                var olEvents = oneLoginClient.GetEvents(next:true);
-//
-//                var olEvents = oneLoginClient.GetEvents(since: DateTime.Today,
-//                    until: DateTime.Today.Add(new TimeSpan(23, 59, 59)), next: true);
-//
-//                if (!olEvents.Any())
-//                {
-//                    break;
-//                }
-//                foreach (var olEvent in olEvents)
-//                {
-//                    var appId = olEvent["app_id"].ToObject(typeof(int?));
-//                    var appName = (string) olEvent["app_name"];
-//
-//                    // insert a new app into database if there's one 
-//                    if (appId != null) // if the event references to an app
-//                    {
-//                        // does the database already have this app? 
-//                        if (context.Apps.FirstOrDefault(app => app.Id == (int) appId) == null)
-//                        {
-//                            // if so, insert this new app into the database
-//                            // create new app object
-//                            var newApp = new App()
-//                            {
-//                                Id = (int) appId,
-//                                Name = appName
-//                            };
-//                            // insert into context
-//                            context.Apps.InsertOnSubmit(newApp);
-//                            // save changes to database
-//                            context.SubmitChanges();
-//                        }
-//                    }
-//
-//                    var newEvent = new Event()
-//                    {
-//                        Id = (int) olEvent["id"],
-//                        App_Id = (int?) olEvent["app_id"],
-//                        EventType_Id = (int) olEvent["event_type_id"],
-//                        CreatedAt = Convert.ToDateTime(olEvent["created_at"])
-//                    };
-//                    context.Events.InsertOnSubmit(newEvent);
-//                    context.SubmitChanges();
-//                    events.Add(newEvent);
-//                    try
-//                    {
-//                    }
-//                    catch (Exception e)
-//                    {
-//                    }
-//                }
-//            }
+            var eventTypes = oneLoginClient.GetEventTypes();
+
+            foreach (var eventType in eventTypes)
+                if (context.EventTypes.FirstOrDefault(e => e.Id == (int) eventType["id"]) == null)
+                    try
+                    {
+                        context.EventTypes.InsertOnSubmit(new EventType()
+                        {
+                            Id = (int) eventType["id"],
+                            Name = (string) eventType["name"],
+                        });
+                        context.SubmitChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        return Ok(eventType);
+                    }
+
+            // list of events to report 
+            var reportableEventTypes = context.EventTypes.Where(e => e.Reportable).ToList();
+
+            foreach (var eventType in reportableEventTypes)
+            {
+                var events = new List<Event>();
+                // update event types if there's a new one
+
+                string afterCursor = "";
+
+                while (true)
+                {
+                    //                var olEvents = oneLoginClient.GetEvents(next:true);
+
+                    var response = oneLoginClient.GetEvents(since: DateTime.Today,
+                        until: DateTime.Today.Add(new TimeSpan(23, 59, 59)));
+
+                    var olEvents = response["data"];
+                    afterCursor = (string) response["pagination"]["after_cursor"];
+
+                    if (!olEvents.Any())
+                    {
+                        break;
+                    }
+
+                    foreach (var olEvent in olEvents)
+                    {
+                        var appId = olEvent["app_id"].ToObject(typeof(int?));
+                        var appName = (string) olEvent["app_name"];
+
+                        // insert a new app into database if there's one 
+                        if (appId != null) // if the event references to an app
+                        {
+                            // does the database already have this app? 
+                            if (context.Apps.FirstOrDefault(app => app.Id == (int) appId) == null)
+                            {
+                                // if so, insert this new app into the database
+                                // create new app object
+                                var newApp = new App()
+                                {
+                                    Id = (int) appId,
+                                    Name = appName
+                                };
+                                // insert into context
+                                context.Apps.InsertOnSubmit(newApp);
+                                // save changes to database
+                                context.SubmitChanges();
+                            }
+                        }
+
+                        var newEvent = new Event()
+                        {
+                            Id = (int) olEvent["id"],
+                            App_Id = (int?) olEvent["app_id"],
+                            EventType_Id = (int) olEvent["event_type_id"],
+                            CreatedAt = Convert.ToDateTime(olEvent["created_at"])
+                        };
+                        context.Events.InsertOnSubmit(newEvent);
+                        context.SubmitChanges();
+                        events.Add(newEvent);
+                        try
+                        {
+                        }
+                        catch (Exception e)
+                        {
+                        }
+                    }
+                }
+            }
+
 
             // aggregate
 
