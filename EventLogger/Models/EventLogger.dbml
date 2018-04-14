@@ -19,7 +19,7 @@
   </Table>
   <Table Name="dbo.Event" Member="Events">
     <Type Name="Event">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CreatedAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="EventType_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />

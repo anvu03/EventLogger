@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Http;
 using System.Web.Mvc.Html;
 using EventLogger.Models;
+using Microsoft.Ajax.Utilities;
 using Event = EventLogger.Models.Event;
 using EventType = EventLogger.Models.EventType;
 
@@ -92,10 +93,11 @@ namespace EventLogger.Controllers
 
                 while (true)
                 {
-                    //                var olEvents = oneLoginClient.GetEvents(next:true);
-
-                    var response = oneLoginClient.GetEvents(since: DateTime.Today,
-                        until: DateTime.Today.Add(new TimeSpan(23, 59, 59)));
+                    var response = oneLoginClient.GetEvents(
+                        eventTypeId: eventType.Id,
+                        since: DateTime.Today.Subtract(new TimeSpan(500, 0, 0)),
+                        until: DateTime.Today.Add(new TimeSpan(23, 59, 59)),
+                        afterCursor: afterCursor);
 
                     var olEvents = response["data"];
                     afterCursor = (string) response["pagination"]["after_cursor"];
@@ -132,14 +134,18 @@ namespace EventLogger.Controllers
 
                         var newEvent = new Event()
                         {
-                            Id = (int) olEvent["id"],
+                            Id = (long) olEvent["id"],
                             App_Id = (int?) olEvent["app_id"],
                             EventType_Id = (int) olEvent["event_type_id"],
                             CreatedAt = Convert.ToDateTime(olEvent["created_at"])
                         };
-                        context.Events.InsertOnSubmit(newEvent);
-                        context.SubmitChanges();
-                        events.Add(newEvent);
+                        if (context.Events.FirstOrDefault(e => e.Id == newEvent.Id) == null)
+                        {
+                            context.Events.InsertOnSubmit(newEvent);
+                            context.SubmitChanges();
+                            events.Add(newEvent);
+                        }
+
                         try
                         {
                         }
@@ -147,6 +153,9 @@ namespace EventLogger.Controllers
                         {
                         }
                     }
+
+                    if (afterCursor == null)
+                        break;
                 }
             }
 

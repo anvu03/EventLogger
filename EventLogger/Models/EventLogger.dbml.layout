@@ -2,56 +2,56 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="EventLogger">
   <DataContextMoniker Name="/EventLoggerDataContext" />
   <nestedChildShapes>
-    <classShape Id="be581c77-e022-4e51-a42c-1c0e4315e413" absoluteBounds="0.75, 4, 2, 1.1939925130208335">
+    <classShape Id="27789a4e-871d-4a8b-8c0d-fdfbcce9f2c2" absoluteBounds="0.75, 4, 2, 1.1939925130208335">
       <DataClassMoniker Name="/EventLoggerDataContext/App" />
       <nestedChildShapes>
-        <elementListCompartment Id="ce0ef72a-fa85-4571-8f84-1752c3a2a012" absoluteBounds="0.765, 4.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="abf0b412-7487-4d7b-9210-9d3fcb19e86a" absoluteBounds="0.765, 4.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="8078efc1-634d-46e9-8de2-359e2861a362" absoluteBounds="0.75, 1.75, 2, 1.3862939453125">
+    <classShape Id="f644f170-8f4d-41c4-98aa-59ecd2b6a89b" absoluteBounds="0.75, 1.75, 2, 1.3862939453125">
       <DataClassMoniker Name="/EventLoggerDataContext/EventType" />
       <nestedChildShapes>
-        <elementListCompartment Id="c5983f12-b1a9-4931-b6ca-894d4693a225" absoluteBounds="0.765, 2.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f22730a1-7f88-48ae-9a73-68dd80ec06ee" absoluteBounds="0.765, 2.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="d4ae1731-ef33-46c2-9a1b-9abd5d1cc56d" absoluteBounds="3.5, 3.875, 2, 1.5785953776041666">
+    <classShape Id="966d81d0-05a6-43a2-86c5-aac886f69521" absoluteBounds="3.5, 3.875, 2, 1.5785953776041666">
       <DataClassMoniker Name="/EventLoggerDataContext/Event" />
       <nestedChildShapes>
-        <elementListCompartment Id="147e9d61-aecb-4e17-a80c-8a24c408dc4e" absoluteBounds="3.515, 4.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="383693f1-28a8-4798-8500-f14b9601528a" absoluteBounds="3.515, 4.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="9301f0bd-0b4c-4c78-a723-371a6fe23986" absoluteBounds="3.5, 0.75, 2, 1.7708968098958331">
+    <classShape Id="e15cc11d-5b2a-462c-b9f3-439d59a29e0f" absoluteBounds="3.5, 0.75, 2, 1.7708968098958331">
       <DataClassMoniker Name="/EventLoggerDataContext/Event_Aggregate" />
       <nestedChildShapes>
-        <elementListCompartment Id="89f8ec14-64b5-44e0-bb09-1eb6ebc90554" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="ce698473-1c6a-4da1-9ef1-19a549df2f44" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <associationConnector edgePoints="[(2.75 : 4.59699625651042); (3.04166666666667 : 4.59699625651042 : JumpStart); (3.20833333333333 : 4.59699625651042 : JumpEnd); (3.5 : 4.59699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/App/App_Event" />
       <nodes>
-        <classShapeMoniker Id="be581c77-e022-4e51-a42c-1c0e4315e413" />
-        <classShapeMoniker Id="d4ae1731-ef33-46c2-9a1b-9abd5d1cc56d" />
+        <classShapeMoniker Id="27789a4e-871d-4a8b-8c0d-fdfbcce9f2c2" />
+        <classShapeMoniker Id="966d81d0-05a6-43a2-86c5-aac886f69521" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 3.1362939453125); (3.125 : 3.5112939453125); (3.125 : 5.05654781705729); (3.5 : 5.05654781705729)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/EventType/EventType_Event" />
       <nodes>
-        <classShapeMoniker Id="8078efc1-634d-46e9-8de2-359e2861a362" />
-        <classShapeMoniker Id="d4ae1731-ef33-46c2-9a1b-9abd5d1cc56d" />
+        <classShapeMoniker Id="f644f170-8f4d-41c4-98aa-59ecd2b6a89b" />
+        <classShapeMoniker Id="966d81d0-05a6-43a2-86c5-aac886f69521" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 4.03214495227364); (3.06607443490112 : 3.71607051737252 : JumpStart); (3.18392556509888 : 3.59821938717476 : JumpEnd); (3.28125 : 3.50089495227364); (3.28125 : 1.63544840494792); (3.5 : 1.63544840494792)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/App/App_Event_Aggregate" />
       <nodes>
-        <classShapeMoniker Id="be581c77-e022-4e51-a42c-1c0e4315e413" />
-        <classShapeMoniker Id="9301f0bd-0b4c-4c78-a723-371a6fe23986" />
+        <classShapeMoniker Id="27789a4e-871d-4a8b-8c0d-fdfbcce9f2c2" />
+        <classShapeMoniker Id="e15cc11d-5b2a-462c-b9f3-439d59a29e0f" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 2.13544840494792); (3.19791666666667 : 2.13544840494792 : JumpStart); (3.36458333333333 : 2.13544840494792 : JumpEnd); (3.5 : 2.13544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EventLoggerDataContext/EventType/EventType_Event_Aggregate" />
       <nodes>
-        <classShapeMoniker Id="8078efc1-634d-46e9-8de2-359e2861a362" />
-        <classShapeMoniker Id="9301f0bd-0b4c-4c78-a723-371a6fe23986" />
+        <classShapeMoniker Id="f644f170-8f4d-41c4-98aa-59ecd2b6a89b" />
+        <classShapeMoniker Id="e15cc11d-5b2a-462c-b9f3-439d59a29e0f" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

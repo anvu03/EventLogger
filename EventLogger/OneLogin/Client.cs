@@ -82,9 +82,9 @@ namespace EventLogger.OneLogin
             string strSince = "";
             string strUntil = "";
             if (since != null)
-                strSince = ((DateTime) since).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
+                strSince = ((DateTime) since).ToString("yyyy-MM-ddTHH:mm:ss");
             if (until != null)
-                strUntil = ((DateTime) until).ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
+                strUntil = ((DateTime) until).ToString("yyyy-MM-ddTHH:mm:ss");
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://api.us.onelogin.com");
@@ -95,7 +95,7 @@ namespace EventLogger.OneLogin
                     .Result;
                 string result = repsonse.Content.ReadAsStringAsync().Result;
                 JObject json = JObject.Parse(result);
-                return json["data"];
+                return json;
             }
         }
     }
