@@ -38,14 +38,6 @@
       <Association Name="EventType_Event_Aggregate" Member="EventType" ThisKey="EventType_Id" OtherKey="Id" Type="EventType" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.DailyAggregate" Member="DailyAggregates">
-    <Type Name="DailyAggregate">
-      <Column Name="EventType_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="count" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Last30" Member="Last30s">
     <Type Name="Last30">
       <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -53,14 +45,14 @@
       <Column Name="count" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.DailyAggregateWithName" Member="DailyAggregateWithNames">
-    <Type Name="DailyAggregateWithName">
-      <Column Name="EventType_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+  <Table Name="dbo.DailyAggregate" Member="DailyAggregates">
+    <Type Name="DailyAggregate">
+      <Column Name="app_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="event_type_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_on" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="count" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="App" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="EventType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="app_name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="event_type_name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

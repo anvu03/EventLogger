@@ -106,14 +106,6 @@ namespace EventLogger.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<DailyAggregate> DailyAggregates
-		{
-			get
-			{
-				return this.GetTable<DailyAggregate>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Last30> Last30s
 		{
 			get
@@ -122,11 +114,11 @@ namespace EventLogger.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<DailyAggregateWithName> DailyAggregateWithNames
+		public System.Data.Linq.Table<DailyAggregate> DailyAggregates
 		{
 			get
 			{
-				return this.GetTable<DailyAggregateWithName>();
+				return this.GetTable<DailyAggregate>();
 			}
 		}
 	}
@@ -895,87 +887,6 @@ namespace EventLogger.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DailyAggregate")]
-	public partial class DailyAggregate
-	{
-		
-		private int _EventType_Id;
-		
-		private System.Nullable<int> _App_Id;
-		
-		private System.Nullable<System.DateTime> _date;
-		
-		private System.Nullable<int> _count;
-		
-		public DailyAggregate()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType_Id", DbType="Int NOT NULL")]
-		public int EventType_Id
-		{
-			get
-			{
-				return this._EventType_Id;
-			}
-			set
-			{
-				if ((this._EventType_Id != value))
-				{
-					this._EventType_Id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
-		public System.Nullable<int> App_Id
-		{
-			get
-			{
-				return this._App_Id;
-			}
-			set
-			{
-				if ((this._App_Id != value))
-				{
-					this._App_Id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date", DbType="Date")]
-		public System.Nullable<System.DateTime> date
-		{
-			get
-			{
-				return this._date;
-			}
-			set
-			{
-				if ((this._date != value))
-				{
-					this._date = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_count", DbType="Int")]
-		public System.Nullable<int> count
-		{
-			get
-			{
-				return this._count;
-			}
-			set
-			{
-				if ((this._count != value))
-				{
-					this._count = value;
-				}
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Last30")]
 	public partial class Last30
 	{
@@ -1039,70 +950,70 @@ namespace EventLogger.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DailyAggregateWithName")]
-	public partial class DailyAggregateWithName
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DailyAggregate")]
+	public partial class DailyAggregate
 	{
 		
-		private int _EventType_Id;
+		private System.Nullable<int> _app_id;
 		
-		private System.Nullable<int> _App_Id;
+		private int _event_type_id;
 		
-		private System.Nullable<System.DateTime> _date;
+		private System.Nullable<System.DateTime> _created_on;
 		
 		private System.Nullable<int> _count;
 		
-		private string _App;
+		private string _app_name;
 		
-		private string _EventType;
+		private string _event_type_name;
 		
-		public DailyAggregateWithName()
+		public DailyAggregate()
 		{
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType_Id", DbType="Int NOT NULL")]
-		public int EventType_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_app_id", DbType="Int")]
+		public System.Nullable<int> app_id
 		{
 			get
 			{
-				return this._EventType_Id;
+				return this._app_id;
 			}
 			set
 			{
-				if ((this._EventType_Id != value))
+				if ((this._app_id != value))
 				{
-					this._EventType_Id = value;
+					this._app_id = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
-		public System.Nullable<int> App_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_event_type_id", DbType="Int NOT NULL")]
+		public int event_type_id
 		{
 			get
 			{
-				return this._App_Id;
+				return this._event_type_id;
 			}
 			set
 			{
-				if ((this._App_Id != value))
+				if ((this._event_type_id != value))
 				{
-					this._App_Id = value;
+					this._event_type_id = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date", DbType="Date")]
-		public System.Nullable<System.DateTime> date
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_on", DbType="Date")]
+		public System.Nullable<System.DateTime> created_on
 		{
 			get
 			{
-				return this._date;
+				return this._created_on;
 			}
 			set
 			{
-				if ((this._date != value))
+				if ((this._created_on != value))
 				{
-					this._date = value;
+					this._created_on = value;
 				}
 			}
 		}
@@ -1123,34 +1034,34 @@ namespace EventLogger.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App", DbType="VarChar(100)")]
-		public string App
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_app_name", DbType="VarChar(100)")]
+		public string app_name
 		{
 			get
 			{
-				return this._App;
+				return this._app_name;
 			}
 			set
 			{
-				if ((this._App != value))
+				if ((this._app_name != value))
 				{
-					this._App = value;
+					this._app_name = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType", DbType="VarChar(100)")]
-		public string EventType
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_event_type_name", DbType="VarChar(100)")]
+		public string event_type_name
 		{
 			get
 			{
-				return this._EventType;
+				return this._event_type_name;
 			}
 			set
 			{
-				if ((this._EventType != value))
+				if ((this._event_type_name != value))
 				{
-					this._EventType = value;
+					this._event_type_name = value;
 				}
 			}
 		}

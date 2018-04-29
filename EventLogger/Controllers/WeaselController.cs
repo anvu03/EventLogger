@@ -31,9 +31,9 @@ namespace EventLogger.Controllers
         [Route("logins")]
         public IHttpActionResult GetLogins()
         {
-            return Json((from eg in _context.DailyAggregateWithNames
-                where eg.App_Id != null && eg.EventType_Id == 8 && ((DateTime)eg.date).Month == DateTime.Today.Month
-                select new {app_name = eg.App, event_type = eg.EventType, count = eg.count}).ToList());
+            return Json((from eg in _context.DailyAggregates
+                where eg.app_id != null && eg.event_type_id == 8 && ((DateTime)eg.created_on).Date == DateTime.Today.Date
+                select new {app_name = eg.app_name, event_type = eg.event_type_name, count = eg.count}).ToList());
         }
 
         [HttpGet]

@@ -54,22 +54,16 @@
         <classShapeMoniker Id="e15cc11d-5b2a-462c-b9f3-439d59a29e0f" />
       </nodes>
     </associationConnector>
-    <classShape Id="0648df22-df9c-4963-bbd7-743f128aad79" absoluteBounds="6.75, 0.75, 2, 1.5785953776041666">
-      <DataClassMoniker Name="/EventLoggerDataContext/DailyAggregate" />
-      <nestedChildShapes>
-        <elementListCompartment Id="6e5b7de3-bdfa-41f9-b110-eb8812c30bbd" absoluteBounds="6.765, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="7d624106-0291-4ee8-a50d-99dd1ea018ff" absoluteBounds="0.75, 6.75, 2, 1.3862939453125005">
       <DataClassMoniker Name="/EventLoggerDataContext/Last30" />
       <nestedChildShapes>
         <elementListCompartment Id="d1cd01af-97fe-4e75-99e1-2ddd8a4faa2a" absoluteBounds="0.765, 7.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="91bd4865-88b3-4bd4-9ae2-6c3b8cc2d331" absoluteBounds="7, 4.125, 2, 1.9631982421875">
-      <DataClassMoniker Name="/EventLoggerDataContext/DailyAggregateWithName" />
+    <classShape Id="910a8748-c157-4b25-ac3b-b8574fec4c4a" absoluteBounds="8.125, 4.75, 2, 1.9631982421875">
+      <DataClassMoniker Name="/EventLoggerDataContext/DailyAggregate" />
       <nestedChildShapes>
-        <elementListCompartment Id="5a6c5246-582c-4761-b9dc-6c4b8c92239c" absoluteBounds="7.015, 4.585, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="597c8787-29fc-479f-a8a3-09df8baa8a92" absoluteBounds="8.14, 5.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
