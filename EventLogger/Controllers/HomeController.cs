@@ -14,5 +14,11 @@ namespace EventLogger.Controllers
 
             return View();
         }
+
+        public ActionResult EventTypes()
+        {
+            ViewBag.Title = "";
+            return View("EventTypes");
+        }
     }
 }

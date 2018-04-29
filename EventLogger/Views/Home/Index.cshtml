@@ -4,15 +4,15 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Period</label>
-                <select class="form-control">
-                    <option value="value">Today</option>
-                    <option value="value">Last 5 days</option>
-                    <option value="value">Last 15 days</option>
-                    <option value="value">Last 30 days</option>
+                <select class="form-control" id="login-period">
+                    <option value="1">Today</option>
+                    <option value="5">Last 5 days</option>
+                    <option value="15">Last 15 days</option>
+                    <option value="30">Last 30 days</option>
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="login-events-table">
             <thead>
             <tr>
                 <th>App</th>
@@ -51,22 +51,22 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Period</label>
-                <select class="form-control">
-                    <option value="value">Today</option>
-                    <option value="value">Last 5 days</option>
-                    <option value="value">Last 15 days</option>
-                    <option value="value">Last 30 days</option>
+                <select class="form-control" id="failed-login-period">
+                    <option value="1">Today</option>
+                    <option value="5">Last 5 days</option>
+                    <option value="15">Last 15 days</option>
+                    <option value="30">Last 30 days</option>
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="failed-login-table">
             <thead>
             <tr>
                 <th>App</th>
                 <th>Count</th>
             </tr>
             </thead>
-            <tbody id="failed-login-tbody"></tbody>
+            <tbody></tbody>
         </table>
         <div>
             <nav aria-label="Page navigation example">
@@ -98,22 +98,22 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Period</label>
-                <select class="form-control">
-                    <option value="value">Today</option>
-                    <option value="value">Last 5 days</option>
-                    <option value="value">Last 15 days</option>
-                    <option value="value">Last 30 days</option>
+                <select class="form-control" id="password-change-period">
+                    <option value="1">Today</option>
+                    <option value="5">Last 5 days</option>
+                    <option value="15">Last 15 days</option>
+                    <option value="30">Last 30 days</option>
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="password-change-events-table">
             <thead>
             <tr>
                 <th>App</th>
                 <th>Count</th>
             </tr>
             </thead>
-            <tbody id="password-change-tbody"></tbody>
+            <tbody></tbody>
         </table>
         <div>
             <nav aria-label="Page navigation example">
@@ -140,59 +140,22 @@
 
 </div>
 
+<script src="~/Scripts/index.js"></script>
 <script>
-    $content = $("#content");
+    const $loginEventTable = $("#login-events-table"),
+        $failedLoginEventTable = $("#failed-login-table"),
+        $passwordChangeEventTable = $("#password-change-events-table");
 
+    const $loginEventPeriod = $("#login-period"),
+        $failedLoginEventPeriod = $("#failed-login-period"),
+        $passwordChangeEventPeriod = $("#password-change-period");
 
-    function renderRows(data) {
-        var rows;
-        /**
-{
-    app_name: "Admin Manager Evaluation By Adjuster",
-    event_type: "USER_LOGGED_INTO_APP",
-    count: 1
-}
-         */
-        data.forEach(function(item) {
-            rows += `
-<tr>
-    <td>${item.app_name}</td>
-    <td>${item.count}</td>
-</tr>
-`;
+    $(document).ready(() => {
+        console.log("ready");
+
+        $loginEventPeriod.change((event) => {
+            getLogins($loginEventPeriod.val());
         });
 
-        return rows;
-    }
-
-    function renderPagination() {
-        var pagination;
-        return pagination;
-    }
-
-    // get logins event 
-    $.ajax({
-        url: "/api/weasel/logins",
-        method: "get"
-    }).done(function(data) {
-        $content.append(renderRows(data));
     });
-
-    // get failed logins 
-    $.ajax({
-        url: "/api/weasel/failed_logins",
-        method: "get"
-    }).done(function(data) {
-        $("#failed-login-tbody").append(renderRows(data));
-    });
-
-    // get password changes
-    $.ajax({
-        url: "/api/weasel/password_changes",
-        method: "get"
-    }).done(function(data) {
-        $("#password-change-tbody").append(renderRows(data));
-    });
-
-
 </script>
