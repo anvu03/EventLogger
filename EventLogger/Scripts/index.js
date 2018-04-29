@@ -47,29 +47,6 @@ function renderPagination() {
     return pagination;
 }
 
-// get logins event 
-$.ajax({
-    url: "/api/weasel/logins",
-    method: "get"
-}).done(function(data) {
-    $content.append(renderRows(data));
-});
-
-// get failed logins 
-$.ajax({
-    url: "/api/weasel/failed_logins",
-    method: "get"
-}).done(function(data) {
-    $("#failed-login-tbody").append(renderRows(data));
-});
-
-// get password changes
-$.ajax({
-    url: "/api/weasel/password_changes",
-    method: "get"
-}).done(function(data) {
-    $("#password-change-tbody").append(renderRows(data));
-});
 
 /**
  * 
@@ -77,16 +54,16 @@ $.ajax({
  */
 function getFailedLogins(period) {
     return $.get({
-        url: "/api/weasel/failed_logins",
-        data: {},
+        url: "/api/weasel/events",
+        data: { rollback: period, eventTypeId: 9 },
         cache: false
     });
 }
 
 function getPasswordChanges(period) {
     return $.get({
-        url: "/api/weasel/password_changes",
-        data: {},
+        url: "/api/weasel/events",
+        data: { rollback: period, eventTypeId: 11 },
         cache: false
     });
 }
@@ -94,8 +71,8 @@ function getPasswordChanges(period) {
 
 function getLogins(period) {
     return $.get({
-        url: "/api/weasel/logins",
-        data: {},
+        url: "/api/weasel/events",
+        data: { rollback: period, eventTypeId: 8 },
         cache: false
     });
 }

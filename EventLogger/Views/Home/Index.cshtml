@@ -154,7 +154,22 @@
         console.log("ready");
 
         $loginEventPeriod.change((event) => {
-            getLogins($loginEventPeriod.val());
+            getLogins($loginEventPeriod.val())
+                .done((resposne) => {
+                    updateTableContent($loginEventTable, resposne);
+                });
+        });
+        $failedLoginEventPeriod.change((event) => {
+            getFailedLogins($failedLoginEventPeriod.val())
+                .done((resposne) => {
+                    updateTableContent($failedLoginEventTable, resposne);
+                });
+        });
+        $passwordChangeEventPeriod.change((event) => {
+            getPasswordChanges($passwordChangeEventPeriod.val())
+                .done((resposne) => {
+                    updateTableContent($passwordChangeEventTable, resposne);
+                });
         });
 
     });
