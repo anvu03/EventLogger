@@ -1,8 +1,18 @@
-﻿<div class="row">
-    <div class="col">
+﻿<style>
+    .max-heigt-800 {
+        max-height: 800px;
+        overflow-y: scroll
+    }
+    div.col-sm-12 {
+        min-width: 300px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-4 col-sm-12 col-12">
         <h5>Login Count Per App</h5>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-6 col-md-6 col-sm-10">
                 <label>Period</label>
                 <select class="form-control" id="login-period">
                     <option value="1">Today</option>
@@ -12,41 +22,43 @@
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped" id="login-events-table">
-            <thead>
-            <tr>
-                <th>App</th>
-                <th>Count</th>
-            </tr>
-            </thead>
-            <tbody id="content"></tbody>
-        </table>
-        <div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="max-heigt-800">
+            <table class="table table-bordered table-striped" id="login-events-table">
+                <thead>
+                <tr>
+                    <th>App</th>
+                    <th>Count</th>
+                </tr>
+                </thead>
+                <tbody id="content"></tbody>
+            </table>
         </div>
+        @* <div> *@
+        @*     <nav aria-label="Page navigation example"> *@
+        @*         <ul class="pagination"> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Previous</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">1</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">2</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">3</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Next</a> *@
+        @*             </li> *@
+        @*         </ul> *@
+        @*     </nav> *@
+        @* </div> *@
     </div>
 
 
     @*    failed login*@
-    <div class="col">
+    <div class="col-md-4 col-sm-12 col-12">
         <h5>Failed Login</h5>
         <div class="row">
             <div class="col-md-4">
@@ -59,41 +71,44 @@
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped" id="failed-login-table">
-            <thead>
-            <tr>
-                <th>App</th>
-                <th>Count</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="max-heigt-800">
+            <table class="table table-bordered table-striped" id="failed-login-table">
+                <thead>
+                <tr>
+                    <th>App</th>
+                    <th>Count</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+
+        @* <div> *@
+        @*     <nav aria-label="Page navigation example"> *@
+        @*         <ul class="pagination"> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Previous</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">1</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">2</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">3</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Next</a> *@
+        @*             </li> *@
+        @*         </ul> *@
+        @*     </nav> *@
+        @* </div> *@
     </div>
 
 
     @*password change*@
-    <div class="col">
+    <div class="col-md-4 col-sm-12 col-12">
         <h5>Password Change</h5>
         <div class="row">
             <div class="col-md-4">
@@ -106,36 +121,39 @@
                 </select>
             </div>
         </div>
-        <table class="table table-bordered table-striped" id="password-change-events-table">
-            <thead>
-            <tr>
-                <th>App</th>
-                <th>Count</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="max-heigt-800">
+            <table class="table table-bordered table-striped" id="password-change-events-table">
+                <thead>
+                <tr>
+                    <th>App</th>
+                    <th>Count</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+
+        @* <div> *@
+        @*     <nav aria-label="Page navigation example"> *@
+        @*         <ul class="pagination"> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Previous</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">1</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">2</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">3</a> *@
+        @*             </li> *@
+        @*             <li class="page-item"> *@
+        @*                 <a class="page-link" href="#">Next</a> *@
+        @*             </li> *@
+        @*         </ul> *@
+        @*     </nav> *@
+        @* </div> *@
     </div>
 
 </div>
@@ -150,27 +168,41 @@
         $failedLoginEventPeriod = $("#failed-login-period"),
         $passwordChangeEventPeriod = $("#password-change-period");
 
+
+    $loginEventPeriod.change((event) => {
+        getLogins($loginEventPeriod.val())
+            .done((resposne) => {
+                updateTableContent($loginEventTable, resposne);
+            });
+    });
+    $failedLoginEventPeriod.change((event) => {
+        getFailedLogins($failedLoginEventPeriod.val())
+            .done((resposne) => {
+                updateTableContent($failedLoginEventTable, resposne);
+            });
+    });
+    $passwordChangeEventPeriod.change((event) => {
+        getPasswordChanges($passwordChangeEventPeriod.val())
+            .done((resposne) => {
+                updateTableContent($passwordChangeEventTable, resposne);
+            });
+    });
+
+
     $(document).ready(() => {
         console.log("ready");
 
-        $loginEventPeriod.change((event) => {
-            getLogins($loginEventPeriod.val())
-                .done((resposne) => {
-                    updateTableContent($loginEventTable, resposne);
-                });
-        });
-        $failedLoginEventPeriod.change((event) => {
-            getFailedLogins($failedLoginEventPeriod.val())
-                .done((resposne) => {
-                    updateTableContent($failedLoginEventTable, resposne);
-                });
-        });
-        $passwordChangeEventPeriod.change((event) => {
-            getPasswordChanges($passwordChangeEventPeriod.val())
-                .done((resposne) => {
-                    updateTableContent($passwordChangeEventTable, resposne);
-                });
-        });
-
+        getLogins(1)
+            .done((resposne) => {
+                updateTableContent($loginEventTable, resposne);
+            });
+        getFailedLogins(1)
+            .done((resposne) => {
+                updateTableContent($failedLoginEventTable, resposne);
+            });
+        getPasswordChanges(1)
+            .done((resposne) => {
+                updateTableContent($passwordChangeEventTable, resposne);
+            });
     });
 </script>
