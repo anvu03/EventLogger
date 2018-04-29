@@ -105,6 +105,30 @@ namespace EventLogger.Models
 				return this.GetTable<Event_Aggregate>();
 			}
 		}
+		
+		public System.Data.Linq.Table<DailyAggregate> DailyAggregates
+		{
+			get
+			{
+				return this.GetTable<DailyAggregate>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Last30> Last30s
+		{
+			get
+			{
+				return this.GetTable<Last30>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DailyAggregateWithName> DailyAggregateWithNames
+		{
+			get
+			{
+				return this.GetTable<DailyAggregateWithName>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.App")]
@@ -867,6 +891,267 @@ namespace EventLogger.Models
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DailyAggregate")]
+	public partial class DailyAggregate
+	{
+		
+		private int _EventType_Id;
+		
+		private System.Nullable<int> _App_Id;
+		
+		private System.Nullable<System.DateTime> _date;
+		
+		private System.Nullable<int> _count;
+		
+		public DailyAggregate()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType_Id", DbType="Int NOT NULL")]
+		public int EventType_Id
+		{
+			get
+			{
+				return this._EventType_Id;
+			}
+			set
+			{
+				if ((this._EventType_Id != value))
+				{
+					this._EventType_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
+		public System.Nullable<int> App_Id
+		{
+			get
+			{
+				return this._App_Id;
+			}
+			set
+			{
+				if ((this._App_Id != value))
+				{
+					this._App_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date", DbType="Date")]
+		public System.Nullable<System.DateTime> date
+		{
+			get
+			{
+				return this._date;
+			}
+			set
+			{
+				if ((this._date != value))
+				{
+					this._date = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_count", DbType="Int")]
+		public System.Nullable<int> count
+		{
+			get
+			{
+				return this._count;
+			}
+			set
+			{
+				if ((this._count != value))
+				{
+					this._count = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Last30")]
+	public partial class Last30
+	{
+		
+		private System.Nullable<int> _App_Id;
+		
+		private int _EventType_Id;
+		
+		private System.Nullable<int> _count;
+		
+		public Last30()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
+		public System.Nullable<int> App_Id
+		{
+			get
+			{
+				return this._App_Id;
+			}
+			set
+			{
+				if ((this._App_Id != value))
+				{
+					this._App_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType_Id", DbType="Int NOT NULL")]
+		public int EventType_Id
+		{
+			get
+			{
+				return this._EventType_Id;
+			}
+			set
+			{
+				if ((this._EventType_Id != value))
+				{
+					this._EventType_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_count", DbType="Int")]
+		public System.Nullable<int> count
+		{
+			get
+			{
+				return this._count;
+			}
+			set
+			{
+				if ((this._count != value))
+				{
+					this._count = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DailyAggregateWithName")]
+	public partial class DailyAggregateWithName
+	{
+		
+		private int _EventType_Id;
+		
+		private System.Nullable<int> _App_Id;
+		
+		private System.Nullable<System.DateTime> _date;
+		
+		private System.Nullable<int> _count;
+		
+		private string _App;
+		
+		private string _EventType;
+		
+		public DailyAggregateWithName()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType_Id", DbType="Int NOT NULL")]
+		public int EventType_Id
+		{
+			get
+			{
+				return this._EventType_Id;
+			}
+			set
+			{
+				if ((this._EventType_Id != value))
+				{
+					this._EventType_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App_Id", DbType="Int")]
+		public System.Nullable<int> App_Id
+		{
+			get
+			{
+				return this._App_Id;
+			}
+			set
+			{
+				if ((this._App_Id != value))
+				{
+					this._App_Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date", DbType="Date")]
+		public System.Nullable<System.DateTime> date
+		{
+			get
+			{
+				return this._date;
+			}
+			set
+			{
+				if ((this._date != value))
+				{
+					this._date = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_count", DbType="Int")]
+		public System.Nullable<int> count
+		{
+			get
+			{
+				return this._count;
+			}
+			set
+			{
+				if ((this._count != value))
+				{
+					this._count = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_App", DbType="VarChar(100)")]
+		public string App
+		{
+			get
+			{
+				return this._App;
+			}
+			set
+			{
+				if ((this._App != value))
+				{
+					this._App = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType", DbType="VarChar(100)")]
+		public string EventType
+		{
+			get
+			{
+				return this._EventType;
+			}
+			set
+			{
+				if ((this._EventType != value))
+				{
+					this._EventType = value;
+				}
 			}
 		}
 	}

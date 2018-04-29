@@ -29,7 +29,6 @@ namespace EventLogger.Controllers
                     };
                     eventTypes.Add(eventType);
 
-
                     try
                     {
                         context.EventTypes.InsertOnSubmit(eventType);
@@ -63,14 +62,20 @@ namespace EventLogger.Controllers
             var eventTypes = oneLoginClient.GetEventTypes();
 
             foreach (var eventType in eventTypes)
-                if (context.EventTypes.FirstOrDefault(e => e.Id == (int) eventType["id"]) == null)
+                try
                 {
                     context.EventTypes.InsertOnSubmit(new EventType()
                     {
-                        Id = (int)eventType["id"],
-                        Name = (string)eventType["name"],
+                        Id = (int) eventType["id"],
+                        Name = (string) eventType["name"],
                     });
                     context.SubmitChanges();
+                }
+                catch (System.Data.Linq.DuplicateKeyException)
+                {
+                }
+                catch (System.Data.SqlClient.SqlException)
+                {
                 }
 
             // list of events to report 
@@ -107,11 +112,8 @@ namespace EventLogger.Controllers
                         // insert a new app into database if there's one 
                         if (appId != null) // if the event references to an app
                         {
-                            // does the database already have this app? 
-                            if (context.Apps.FirstOrDefault(app => app.Id == (int) appId) == null)
+                            try
                             {
-                                // if so, insert this new app into the database
-                                // create new app object
                                 var newApp = new App()
                                 {
                                     Id = (int) appId,
@@ -121,6 +123,12 @@ namespace EventLogger.Controllers
                                 context.Apps.InsertOnSubmit(newApp);
                                 // save changes to database
                                 context.SubmitChanges();
+                            }
+                            catch (System.Data.SqlClient.SqlException e)
+                            {
+                            }
+                            catch (System.Data.Linq.DuplicateKeyException e)
+                            {
                             }
                         }
 
@@ -146,7 +154,6 @@ namespace EventLogger.Controllers
 
 
             // aggregate
-
             var result = (from e in context.Events
 //                where e.CreatedAt > new DateTime() && e.CreatedAt < new DateTime()
                 group e by new {e.EventType_Id, e.App_Id}
@@ -157,34 +164,6 @@ namespace EventLogger.Controllers
                     g.Key.App_Id,
                     count = g.Count()
                 }).ToList();
-
-
-            // insert aggregate into database
-            // TODO prevent inserting twice
-            foreach (var r in result)
-            {
-                var instance = context.Event_Aggregates.FirstOrDefault(
-                    eg => (eg.App_Id == r.App_Id || (eg.App_Id == null && r.App_Id == null)) &&
-                          eg.EventType_Id == r.EventType_Id);
-                if (instance == null)
-                {
-                    context.Event_Aggregates.InsertOnSubmit(new Event_Aggregate()
-                    {
-                        Date = DateTime.Today,
-                        App_Id = r.App_Id,
-                        EventType_Id = r.EventType_Id,
-                        Count = r.count
-                    });
-                    context.SubmitChanges();
-                }
-                else
-                {
-                    // update count
-                    instance.Count = r.count;
-                    context.SubmitChanges();
-                }
-            }
-
 
             context.Dispose();
             return Json(result);
