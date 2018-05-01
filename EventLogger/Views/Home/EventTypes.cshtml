@@ -1,8 +1,29 @@
-﻿
+﻿@using System.Activities.Statements
 @{
     ViewBag.Title = "EventTypes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@model IEnumerable<EventLogger.Models.EventType>
+
 <h2>EventTypes</h2>
 
+<table class="table table-bordered table-responsive">
+    <thead>
+    <th>
+        Id
+    </th>
+    <th>Name</th>
+    <th>Reportable</th>
+    </thead>
+    <tbody>
+    @foreach (var eventType in Model)
+    {
+        <tr>
+            <td>@eventType.Id</td>
+            <td>@eventType.Name</td>
+            <td>@eventType.Reportable</td>
+        </tr>
+    }
+    </tbody>
+</table>

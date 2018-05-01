@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EventLogger.Models;
 
 namespace EventLogger.Controllers
 {
@@ -18,7 +19,8 @@ namespace EventLogger.Controllers
         public ActionResult EventTypes()
         {
             ViewBag.Title = "";
-            return View("EventTypes");
+            using(var context = new EventLoggerDataContext())
+            return View("EventTypes", context.EventTypes.ToList());
         }
     }
 }
