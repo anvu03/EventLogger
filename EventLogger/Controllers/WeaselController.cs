@@ -57,23 +57,5 @@ namespace EventLogger.Controllers
                       ((DateTime) eg.created_on).Date == DateTime.Today.Date
                 select new {app_name = eg.app_name, event_type = eg.event_type_name, count = eg.count}).ToList());
         }
-
-        [HttpGet]
-        [Route("failed_logins")]
-        public IHttpActionResult GetFailedLogins()
-        {
-            return Json((from eg in _context.Event_Aggregates
-                where eg.App_Id != null && eg.EventType_Id == 9
-                select new {app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count}).ToList());
-        }
-
-        [HttpGet]
-        [Route("password_changes")]
-        public IHttpActionResult GetPasswordChanges()
-        {
-            return Json((from eg in _context.Event_Aggregates
-                where eg.App_Id != null && eg.EventType_Id == 11 // password change = 11
-                select new {app_name = eg.App.Name, event_type = eg.EventType.Name, count = eg.Count}).ToList());
-        }
     }
 }

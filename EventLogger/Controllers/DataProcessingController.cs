@@ -11,38 +11,15 @@ namespace EventLogger.Controllers
     [RoutePrefix("api/DataProcessing")]
     public class DataProcessingController : ApiController
     {
-        [Route("UpdateEventTypes")]
-        [HttpGet]
-        public IHttpActionResult UpdateEventTypes()
+        private EventLoggerDataContext _context;
+        public DataProcessingController()
         {
-            var oneLoginClient = new OneLogin.Client();
-            var olEventTypes = oneLoginClient.GetEventTypes();
-            var eventTypes = new List<EventType>();
-            using (var context = new EventLoggerDataContext())
-            {
-                foreach (var olEventType in olEventTypes)
-                {
-                    var eventType = new EventType
-                    {
-                        Id = (int) olEventType["id"],
-                        Name = (string) olEventType["name"]
-                    };
-                    eventTypes.Add(eventType);
+            _context = new EventLoggerDataContext();
+        }
 
-                    try
-                    {
-                        context.EventTypes.InsertOnSubmit(eventType);
-                        context.SubmitChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        return Ok(olEventType);
-                    }
-                }
-            }
-
-
-            return Ok();
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
         }
 
         /// <summary>
@@ -54,23 +31,21 @@ namespace EventLogger.Controllers
         [HttpGet]
         public IHttpActionResult InsertEvents()
         {
-            var context = new EventLoggerDataContext();
             var oneLoginClient = new OneLogin.Client();
 
-            // update event types 
             var events = new List<Event>();
 
+            // update event types 
             var eventTypes = oneLoginClient.GetEventTypes();
-
             foreach (var eventType in eventTypes)
                 try
                 {
-                    context.EventTypes.InsertOnSubmit(new EventType()
+                    _context.EventTypes.InsertOnSubmit(new EventType()
                     {
                         Id = (int) eventType["id"],
                         Name = (string) eventType["name"],
                     });
-                    context.SubmitChanges();
+                    _context.SubmitChanges();
                 }
                 catch (System.Data.Linq.DuplicateKeyException)
                 {
@@ -80,7 +55,7 @@ namespace EventLogger.Controllers
                 }
 
             // list of events to report 
-            var reportableEventTypes = context.EventTypes.Where(e => e.Reportable).ToList();
+            var reportableEventTypes = _context.EventTypes.Where(e => e.Reportable).ToList();
 
             foreach (var eventType in reportableEventTypes)
             {
@@ -90,28 +65,29 @@ namespace EventLogger.Controllers
 
                 while (true)
                 {
+                    // get all events occured yesterday for a particular event_id 
                     var response = oneLoginClient.GetEvents(
                         eventTypeId: eventType.Id,
-                        since: DateTime.Today.Subtract(new TimeSpan(500, 0, 0)),
-                        until: DateTime.Today.Add(new TimeSpan(23, 59, 59)),
+                        since: DateTime.Now.AddDays(-1),
+                        until: DateTime.Now,
                         afterCursor: afterCursor);
 
-                    var olEvents = response["data"];
+                    var eventsRetrived = response["data"];
                     afterCursor = (string) response["pagination"]["after_cursor"];
 
-                    if (!olEvents.Any())
+                    // if no events, break the loop and go to the end of function
+                    if (!eventsRetrived.Any())
                     {
                         break;
                     }
 
-                    foreach (var olEvent in olEvents)
+                    foreach (var _event in eventsRetrived)
                     {
-                        var appId = olEvent["app_id"].ToObject(typeof(int?));
-                        var appName = (string) olEvent["app_name"];
+                        var appId = _event["app_id"].ToObject(typeof(int?));
+                        var appName = (string) _event["app_name"];
 
-                        // insert a new app into database if there's one 
+                        // if there's a new app, insert it into the database
                         if (appId != null) // if the event references to an app
-                        {
                             try
                             {
                                 var newApp = new App()
@@ -119,10 +95,8 @@ namespace EventLogger.Controllers
                                     Id = (int) appId,
                                     Name = appName
                                 };
-                                // insert into context
-                                context.Apps.InsertOnSubmit(newApp);
-                                // save changes to database
-                                context.SubmitChanges();
+                                _context.Apps.InsertOnSubmit(newApp);
+                                _context.SubmitChanges();
                             }
                             catch (System.Data.SqlClient.SqlException e)
                             {
@@ -130,38 +104,39 @@ namespace EventLogger.Controllers
                             catch (System.Data.Linq.DuplicateKeyException e)
                             {
                             }
-                        }
 
+                        // create a container
                         var newEvent = new Event()
                         {
-                            Id = (long) olEvent["id"],
-                            App_Id = (int?) olEvent["app_id"],
-                            EventType_Id = (int) olEvent["event_type_id"],
-                            CreatedAt = Convert.ToDateTime(olEvent["created_at"])
+                            Id = (long) _event["id"],
+                            App_Id = (int?) _event["app_id"],
+                            EventType_Id = (int) _event["event_type_id"],
+                            CreatedAt = Convert.ToDateTime(_event["created_at"])
                         };
 
+                        // insert this event into database
                         try
                         {
-                            context.Events.InsertOnSubmit(newEvent);
-                            context.SubmitChanges();
-                            events.Add(newEvent);
+                            _context.Events.InsertOnSubmit(newEvent);
+                            events.Add(newEvent); // for keeping track only
+                            _context.SubmitChanges();
                         }
                         catch (System.Data.SqlClient.SqlException e)
                         {
+                            return Ok(newEvent);
                         }
                         catch (System.Data.Linq.DuplicateKeyException e)
                         {
+                            return Ok(newEvent);
                         }
-
                     }
-
+                    // break if there's no nextpage
                     if (afterCursor == null)
                         break;
                 }
             }
 
-            context.Dispose();
-            return Ok(events.Count);
+            return Ok(events);
         }
     }
 }

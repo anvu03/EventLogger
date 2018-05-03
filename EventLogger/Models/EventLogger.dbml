@@ -5,7 +5,6 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Association Name="App_Event" Member="Events" ThisKey="Id" OtherKey="App_Id" Type="Event" />
-      <Association Name="App_Event_Aggregate" Member="Event_Aggregates" ThisKey="Id" OtherKey="App_Id" Type="Event_Aggregate" />
     </Type>
   </Table>
   <Table Name="dbo.EventType" Member="EventTypes">
@@ -14,7 +13,6 @@
       <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="Reportable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="EventType_Event" Member="Events" ThisKey="Id" OtherKey="EventType_Id" Type="Event" />
-      <Association Name="EventType_Event_Aggregate" Member="Event_Aggregates" ThisKey="Id" OtherKey="EventType_Id" Type="Event_Aggregate" />
     </Type>
   </Table>
   <Table Name="dbo.Event" Member="Events">
@@ -25,24 +23,6 @@
       <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="App_Event" Member="App" ThisKey="App_Id" OtherKey="Id" Type="App" IsForeignKey="true" />
       <Association Name="EventType_Event" Member="EventType" ThisKey="EventType_Id" OtherKey="Id" Type="EventType" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Event_Aggregate" Member="Event_Aggregates">
-    <Type Name="Event_Aggregate">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="EventType_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Association Name="App_Event_Aggregate" Member="App" ThisKey="App_Id" OtherKey="Id" Type="App" IsForeignKey="true" />
-      <Association Name="EventType_Event_Aggregate" Member="EventType" ThisKey="EventType_Id" OtherKey="Id" Type="EventType" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Last30" Member="Last30s">
-    <Type Name="Last30">
-      <Column Name="App_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="EventType_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="count" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.DailyAggregate" Member="DailyAggregates">
