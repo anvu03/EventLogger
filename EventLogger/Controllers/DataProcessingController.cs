@@ -58,6 +58,7 @@ namespace EventLogger.Controllers
             var oneLoginClient = new OneLogin.Client();
 
             // update event types 
+            var events = new List<Event>();
 
             var eventTypes = oneLoginClient.GetEventTypes();
 
@@ -83,7 +84,6 @@ namespace EventLogger.Controllers
 
             foreach (var eventType in reportableEventTypes)
             {
-                var events = new List<Event>();
                 // update event types if there's a new one
 
                 string afterCursor = "";
@@ -139,12 +139,20 @@ namespace EventLogger.Controllers
                             EventType_Id = (int) olEvent["event_type_id"],
                             CreatedAt = Convert.ToDateTime(olEvent["created_at"])
                         };
-                        if (context.Events.FirstOrDefault(e => e.Id == newEvent.Id) == null)
+
+                        try
                         {
                             context.Events.InsertOnSubmit(newEvent);
                             context.SubmitChanges();
                             events.Add(newEvent);
                         }
+                        catch (System.Data.SqlClient.SqlException e)
+                        {
+                        }
+                        catch (System.Data.Linq.DuplicateKeyException e)
+                        {
+                        }
+
                     }
 
                     if (afterCursor == null)
@@ -152,21 +160,8 @@ namespace EventLogger.Controllers
                 }
             }
 
-
-            // aggregate
-            var result = (from e in context.Events
-//                where e.CreatedAt > new DateTime() && e.CreatedAt < new DateTime()
-                group e by new {e.EventType_Id, e.App_Id}
-                into g
-                select new
-                {
-                    g.Key.EventType_Id,
-                    g.Key.App_Id,
-                    count = g.Count()
-                }).ToList();
-
             context.Dispose();
-            return Json(result);
+            return Ok(events.Count);
         }
     }
 }
