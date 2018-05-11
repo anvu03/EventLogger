@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Data.Linq;
 using System.Linq;
 using System.Net;
@@ -15,11 +16,11 @@ namespace EventLogger.Controllers
     [RoutePrefix("api/weasel")]
     public class EventController : ApiController
     {
-        private readonly EventLoggerDataContext _context;
+        private readonly EventLogger.Models.PilotDBEntities _context;
 
         public EventController()
         {
-            _context = new EventLoggerDataContext();
+            _context = new PilotDBEntities();
         }
 
         protected override void Dispose(bool disposing)
@@ -32,9 +33,10 @@ namespace EventLogger.Controllers
         [Route("events")]
         public IHttpActionResult GetEvents(int eventTypeId, int rollback = 0)
         {
+            var begin = DateTime.Today.Subtract(new TimeSpan(rollback, 0, 0, 0));
             return Json((from da in _context.DailyAggregates
                 where da.event_type_id == eventTypeId &&
-                      ((DateTime) da.created_on).Date >= DateTime.Today.Subtract(new TimeSpan(rollback, 0, 0, 0)).Date
+                      EntityFunctions.TruncateTime(da.created_on) >= EntityFunctions.TruncateTime(begin)
                 group da by new {app_id = da.app_id, da.event_type_id}
                 into grp
                 let count = grp.Sum(x => x.count)
@@ -43,8 +45,8 @@ namespace EventLogger.Controllers
                     grp.Key.app_id,
                     grp.Key.event_type_id,
                     count,
-                    grp.First().app_name,
-                    grp.First().event_type_name
+                    grp.FirstOrDefault().app_name,
+                    grp.FirstOrDefault().event_type_name
                 }).ToList());
         }
 
@@ -54,8 +56,8 @@ namespace EventLogger.Controllers
         {
             return Json((from eg in _context.DailyAggregates
                 where eg.app_id != null && eg.event_type_id == 8 &&
-                      ((DateTime) eg.created_on).Date == DateTime.Today.Date
-                select new {app_name = eg.app_name, event_type = eg.event_type_name, count = eg.count}).ToList());
+                      EntityFunctions.TruncateTime(eg.created_on) == EntityFunctions.TruncateTime(DateTime.Today)
+                         select new {app_name = eg.app_name, event_type = eg.event_type_name, count = eg.count}).ToList());
         }
     }
 }

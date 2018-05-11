@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Web.Http;
 using EventLogger.Models;
@@ -11,15 +12,12 @@ namespace EventLogger.Controllers
     [RoutePrefix("api/DataProcessing")]
     public class DataProcessingController : ApiController
     {
-        private EventLoggerDataContext _context;
         public DataProcessingController()
         {
-            _context = new EventLoggerDataContext();
         }
 
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose();
         }
 
         /// <summary>
@@ -31,112 +29,115 @@ namespace EventLogger.Controllers
         [HttpGet]
         public IHttpActionResult InsertEvents()
         {
-            var oneLoginClient = new OneLogin.Client();
-
-            var events = new List<Event>();
-
-            // update event types 
-            var eventTypes = oneLoginClient.GetEventTypes();
-            foreach (var eventType in eventTypes)
-                try
-                {
-                    _context.EventTypes.InsertOnSubmit(new EventType()
-                    {
-                        Id = (int) eventType["id"],
-                        Name = (string) eventType["name"],
-                    });
-                    _context.SubmitChanges();
-                }
-                catch (System.Data.Linq.DuplicateKeyException)
-                {
-                }
-                catch (System.Data.SqlClient.SqlException)
-                {
-                }
-
-            // list of events to report 
-            var reportableEventTypes = _context.EventTypes.Where(e => e.Reportable).ToList();
-
-            foreach (var eventType in reportableEventTypes)
+            using (var context = new PilotDBEntities())
             {
-                // update event types if there's a new one
+                var oneLoginClient = new OneLogin.Client();
 
-                string afterCursor = "";
+                var events = new List<Event>();
 
-                while (true)
+                // update event types 
+                var eventTypes = oneLoginClient.GetEventTypes();
+                foreach (var eventType in eventTypes)
                 {
-                    // get all events occured yesterday for a particular event_id 
-                    var response = oneLoginClient.GetEvents(
-                        eventTypeId: eventType.Id,
-                        since: DateTime.Now.AddDays(-1),
-                        until: DateTime.Now,
-                        afterCursor: afterCursor);
-
-                    var eventsRetrived = response["data"];
-                    afterCursor = (string) response["pagination"]["after_cursor"];
-
-                    // if no events, break the loop and go to the end of function
-                    if (!eventsRetrived.Any())
+                    var eventTypeId = (int) eventType["id"];
+                    if (context.EventTypes.FirstOrDefault(et => et.Id == eventTypeId) == null)
                     {
-                        break;
+                        context.EventTypes.Add(new EventType()
+                        {
+                            Id = (int) eventType["id"],
+                            Name = (string) eventType["name"],
+                        });
+                        try
+                        {
+                            context.SaveChanges();
+                        }
+                        catch (System.Data.SqlClient.SqlException)
+                        {
+                        }
                     }
+                }
 
-                    foreach (var _event in eventsRetrived)
+
+                // list of events to report 
+                var reportableEventTypes = context.EventTypes.Where(e => e.Reportable).ToList();
+
+                foreach (var eventType in reportableEventTypes)
+                {
+                    // update event types if there's a new one
+
+                    string afterCursor = "";
+
+                    while (true)
                     {
-                        var appId = _event["app_id"].ToObject(typeof(int?));
-                        var appName = (string) _event["app_name"];
+                        // get all events occured yesterday for a particular event_id 
+                        var response = oneLoginClient.GetEvents(
+                            eventTypeId: eventType.Id,
+                            since: DateTime.Now.AddDays(-2),
+                            until: DateTime.Now,
+                            afterCursor: afterCursor);
 
-                        // if there's a new app, insert it into the database
-                        if (appId != null) // if the event references to an app
+                        var eventsRetrived = response["data"];
+                        afterCursor = (string) response["pagination"]["after_cursor"];
+
+                        // if no events, break the loop and go to the end of function
+                        if (!eventsRetrived.Any())
+                        {
+                            break;
+                        }
+
+//                        return Json(eventsRetrived);
+                        foreach (var _event in eventsRetrived)
+                        {
+                            var appId = _event["app_id"].ToObject(typeof(int?));
+                            var appName = (string) _event["app_name"];
+
+                            // if there's a new app, insert it into the database
+                            if (appId != null && context.Apps.FirstOrDefault(app => app.Name == appName) == null) // if the event references to an app
+                                try
+                                {
+                                    var newApp = new App()
+                                    {
+                                        Id = (int) appId,
+                                        Name = appName
+                                    };
+                                    context.Apps.Add(newApp);
+                                    context.SaveChanges();
+                                }
+                                catch (System.Data.SqlClient.SqlException)
+                                {
+                                }
+
+                            // create a container
+                            var newEvent = new Event()
+                            {
+                                Id = (long) _event["id"],
+                                App_Id = (int?) _event["app_id"],
+                                EventType_Id = (int) _event["event_type_id"],
+                                CreatedAt = Convert.ToDateTime(_event["created_at"])
+                            };
+
+                            // insert this event into database
+                            context.Events.Add(newEvent);
+                            context.SaveChanges();
+
                             try
                             {
-                                var newApp = new App()
-                                {
-                                    Id = (int) appId,
-                                    Name = appName
-                                };
-                                _context.Apps.InsertOnSubmit(newApp);
-                                _context.SubmitChanges();
+                                //                            _context.Events.(newEvent); // for keeping track only
                             }
                             catch (System.Data.SqlClient.SqlException e)
                             {
+                                return Ok(newEvent);
                             }
-                            catch (System.Data.Linq.DuplicateKeyException e)
-                            {
-                            }
+                        }
 
-                        // create a container
-                        var newEvent = new Event()
-                        {
-                            Id = (long) _event["id"],
-                            App_Id = (int?) _event["app_id"],
-                            EventType_Id = (int) _event["event_type_id"],
-                            CreatedAt = Convert.ToDateTime(_event["created_at"])
-                        };
-
-                        // insert this event into database
-                        try
-                        {
-                            _context.Events.InsertOnSubmit(newEvent);
-                            events.Add(newEvent); // for keeping track only
-                            _context.SubmitChanges();
-                        }
-                        catch (System.Data.SqlClient.SqlException e)
-                        {
-                            return Ok(newEvent);
-                        }
-                        catch (System.Data.Linq.DuplicateKeyException e)
-                        {
-                            return Ok(newEvent);
-                        }
+                        // break if there's no nextpage
+                        if (afterCursor == null)
+                            break;
                     }
-                    // break if there's no nextpage
-                    if (afterCursor == null)
-                        break;
                 }
-            }
 
-            return Ok(events);
+                return Ok(events);
+            }
         }
     }
 }

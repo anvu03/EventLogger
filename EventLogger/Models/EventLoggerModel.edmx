@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PilotDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="App">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="EventType_Id" Type="int" Nullable="false" />
+          <Property Name="App_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Reportable" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PilotDB.dbo.DailyAggregate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DailyAggregate">
+          <Key>
+            <PropertyRef Name="event_type_id" />
+          </Key>
+          <Property Name="app_id" Type="int" />
+          <Property Name="event_type_id" Type="int" Nullable="false" />
+          <Property Name="created_on" Type="date" />
+          <Property Name="count" Type="int" />
+          <Property Name="app_name" Type="varchar" MaxLength="100" />
+          <Property Name="event_type_name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PilotDB.dbo.Last30' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Last30">
+          <Key>
+            <PropertyRef Name="EventType_Id" />
+          </Key>
+          <Property Name="App_Id" Type="int" />
+          <Property Name="EventType_Id" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" />
+        </EntityType>
+        <Association Name="Event_App">
+          <End Role="App" Type="Self.App" Multiplicity="0..1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="App">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="App_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Event_EventType">
+          <End Role="EventType" Type="Self.EventType" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="EventType_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PilotDBModelStoreContainer">
+          <EntitySet Name="App" EntityType="Self.App" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DailyAggregate" EntityType="Self.DailyAggregate" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DailyAggregate].[app_id] AS [app_id], 
+    [DailyAggregate].[event_type_id] AS [event_type_id], 
+    [DailyAggregate].[created_on] AS [created_on], 
+    [DailyAggregate].[count] AS [count], 
+    [DailyAggregate].[app_name] AS [app_name], 
+    [DailyAggregate].[event_type_name] AS [event_type_name]
+    FROM [dbo].[DailyAggregate] AS [DailyAggregate]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Last30" EntityType="Self.Last30" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Last30].[App_Id] AS [App_Id], 
+    [Last30].[EventType_Id] AS [EventType_Id], 
+    [Last30].[count] AS [count]
+    FROM [dbo].[Last30] AS [Last30]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="Event_App" Association="Self.Event_App">
+            <End Role="App" EntitySet="App" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="Event_EventType" Association="Self.Event_EventType">
+            <End Role="EventType" EntitySet="EventType" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PilotDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="App">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Events" Relationship="Self.Event_App" FromRole="App" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EventType_Id" Type="Int32" Nullable="false" />
+          <Property Name="App_Id" Type="Int32" />
+          <NavigationProperty Name="App" Relationship="Self.Event_App" FromRole="Event" ToRole="App" />
+          <NavigationProperty Name="EventType" Relationship="Self.Event_EventType" FromRole="Event" ToRole="EventType" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Reportable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Events" Relationship="Self.Event_EventType" FromRole="EventType" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="DailyAggregate">
+          <Key>
+            <PropertyRef Name="event_type_id" />
+          </Key>
+          <Property Name="app_id" Type="Int32" />
+          <Property Name="event_type_id" Type="Int32" Nullable="false" />
+          <Property Name="created_on" Type="DateTime" Precision="0" />
+          <Property Name="count" Type="Int32" />
+          <Property Name="app_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="event_type_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Last30">
+          <Key>
+            <PropertyRef Name="EventType_Id" />
+          </Key>
+          <Property Name="App_Id" Type="Int32" />
+          <Property Name="EventType_Id" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" />
+        </EntityType>
+        <Association Name="Event_App">
+          <End Role="App" Type="Self.App" Multiplicity="0..1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="App">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="App_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Event_EventType">
+          <End Role="EventType" Type="Self.EventType" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="EventType_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PilotDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apps" EntityType="Self.App" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="EventTypes" EntityType="Self.EventType" />
+          <EntitySet Name="DailyAggregates" EntityType="Self.DailyAggregate" />
+          <EntitySet Name="Last30" EntityType="Self.Last30" />
+          <AssociationSet Name="Event_App" Association="Self.Event_App">
+            <End Role="App" EntitySet="Apps" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="Event_EventType" Association="Self.Event_EventType">
+            <End Role="EventType" EntitySet="EventTypes" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PilotDBModelStoreContainer" CdmEntityContainer="PilotDBEntities">
+          <EntitySetMapping Name="Apps">
+            <EntityTypeMapping TypeName="PilotDBModel.App">
+              <MappingFragment StoreEntitySet="App">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="PilotDBModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="EventType_Id" ColumnName="EventType_Id" />
+                <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventTypes">
+            <EntityTypeMapping TypeName="PilotDBModel.EventType">
+              <MappingFragment StoreEntitySet="EventType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Reportable" ColumnName="Reportable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyAggregates">
+            <EntityTypeMapping TypeName="PilotDBModel.DailyAggregate">
+              <MappingFragment StoreEntitySet="DailyAggregate">
+                <ScalarProperty Name="app_id" ColumnName="app_id" />
+                <ScalarProperty Name="event_type_id" ColumnName="event_type_id" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="app_name" ColumnName="app_name" />
+                <ScalarProperty Name="event_type_name" ColumnName="event_type_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Last30">
+            <EntityTypeMapping TypeName="PilotDBModel.Last30">
+              <MappingFragment StoreEntitySet="Last30">
+                <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+                <ScalarProperty Name="EventType_Id" ColumnName="EventType_Id" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

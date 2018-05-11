@@ -19,7 +19,7 @@ namespace EventLogger.Controllers
         public ActionResult EventTypes()
         {
             ViewBag.Title = "";
-            using(var context = new EventLoggerDataContext())
+            using(var context = new PilotDBEntities())
             return View("EventTypes", context.EventTypes.ToList());
         }
     }
